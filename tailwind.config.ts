@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 // import svgToDataUri from "mini-svg-data-uri";
-// import colors from "tailwindcss/colors";
+import colors from "tailwindcss/colors";
 import { default as flattenColorPalette } from "tailwindcss/lib/util/flattenColorPalette";
 
 // const svgToDataUri = require("mini-svg-data-uri");
@@ -163,6 +163,9 @@ const config = {
       //   scroll:
       //     "scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite",
       // },
+      boxShadow: {
+        input: `0px 2px 3px -1px rgba(0,0,0,0.1), 0px 1px 0px 0px rgba(25,28,33,0.02), 0px 0px 0px 1px rgba(25,28,33,0.08)`,
+      },
     },
   },
   plugins: [
