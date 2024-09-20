@@ -20,7 +20,6 @@ export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
 const Sidebar = () => {
   const { open } = useSidebar();
   return (
-    
       <SidebarBody className="justify-between gap-10">
         <div className="flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           {open ? <Logo /> : <LogoIcon />}
