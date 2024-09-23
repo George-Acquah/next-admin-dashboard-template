@@ -2,7 +2,7 @@ interface _ISidebarContextProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   animate: boolean;
-  setAnimate: React.Dispatch<React.SetStateAction<boolean>>;
+  // setAnimate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface _IModalContextProps {
@@ -23,12 +23,39 @@ interface _ILinks {
 interface _ITooltipItem {
   id: number;
   name: string;
-  designation: string;
-  image: string;
+  designation?: string;
+  image?: string;
+  icon?: any;
+  theme?: 'dark' | 'light';
 }
 
 interface _IChildren {
   children: React.ReactNode;
+}
+
+interface _INotification {
+  id: number;
+  subject: string;
+  message: string;
+}
+
+interface _ISearchParams {
+  SESSION: string;
+  ERROR: string;
+  ERR_MSG: string;
+  ERR_DESC: string;
+  BTN_LABEL: string;
+  ENTITY_TYPE: string;
+  QUERY: string;
+  FORM_STEP: string;
+}
+
+interface _ISearchQuery {
+  searchParams?: {
+    q?: string;
+    page?: string;
+    size?: string;
+  };
 }
 
 

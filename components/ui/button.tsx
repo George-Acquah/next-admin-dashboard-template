@@ -2,7 +2,7 @@ import * as React from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "@/utils/classes.utils";
 
-type _TButtonVariants = _TVariants | 'ghost' | 'link';
+export type _TButtonVariants = _TVariants | 'ghost' | 'link';
 interface _IButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   variant: _TButtonVariants;
   size: _TSizes;
@@ -14,14 +14,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90",
+          "bg-primary dark:bg-primary-dark text-primary-foreground dark:text-primary-darkForeground  shadow hover:bg-primary/80",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+          "bg-destructive dark:bg-destructive-dark text-destructive-foreground dark:text-destructive-darkForeground shadow-sm hover:bg-destructive/80 dark:hover:bg-destructive-dark/80",
         outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
+          "border border:neutral-300 dark:border-neutral-600 bg-outline/5 dark:bg-outline-dark/5 shadow-sm hover:bg-outline/60 dark:hover:bg-outline-dark/60 hover:text-outline-foreground dark:hover:text-outline-darkForeground",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
+          "bg-secondary dark:bg-secondary-dark text-secondary-foreground dark:text-secondary-darkForeground shadow-sm hover:bg-secondary/80 dark:hover:bg-secondary-dark/80",
+        ghost:
+          "hover:bg-accent dark:hover:bg-accent-dark hover:text-accent-foreground dark:hover:text-accent-darkForeground",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

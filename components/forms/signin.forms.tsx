@@ -3,6 +3,7 @@ import React from "react";
 import { Input } from "../ui/input";
 import { cn } from "@/utils/classes.utils";
 import { Label } from "../ui/label";
+import { Typography } from "../ui/typography";
 
 export function SignupFormDemo() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -11,9 +12,9 @@ export function SignupFormDemo() {
   };
   return (
     <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-8 shadow-input bg-white dark:bg-black">
-      <h2 className="font-bold text-xl text-neutral-800 dark:text-neutral-200">
+      <Typography variant="h2">
         Welcome to Aceternity
-      </h2>
+      </Typography>
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
         Login to aceternity if you can because we don&apos;t have a login flow
         yet
@@ -97,8 +98,8 @@ export function SignupFormDemo() {
 const BottomGradient = () => {
   return (
     <>
-      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
+      <Typography variant="span" className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
+      <Typography variant="span" className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
     </>
   );
 };

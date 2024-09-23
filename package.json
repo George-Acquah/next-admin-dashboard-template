@@ -24,7 +24,8 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.53.0",
     "recharts": "^2.12.7",
-    "tailwind-merge": "^2.5.2"
+    "tailwind-merge": "^2.5.2",
+    "use-debounce": "^10.0.3"
   },
   "devDependencies": {
     "@types/node": "^20",

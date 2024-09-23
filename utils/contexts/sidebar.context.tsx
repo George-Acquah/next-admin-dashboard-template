@@ -10,17 +10,17 @@ export const useSidebar = () => {
   return context;
 }
 
-const SidebarProvider = ({ children, open: openProp, setOpen: setOpenProp, animate: animateProp, setAnimate: setAnimateProp }: _ISidebarProviderProps ) => {
+const SidebarProvider = ({ children, open: openProp, setOpen: setOpenProp, animate}: _ISidebarProviderProps ) => {
   const [openState, setOpenState] = useState(false);
-  const [animateState, setAnimateState] = useState(true);
+  // const [animateState, setAnimateState] = useState(true);
     const open = openProp !== undefined ? openProp : openState;
-    const animate = animateProp !== undefined ? animateProp : animateState;
+    // const animate = animateProp !== undefined ? animateProp : animateState;
     const setOpen = setOpenProp !== undefined ? setOpenProp : setOpenState;
-    const setAnimate =
-      setAnimateProp !== undefined ? setAnimateProp : setAnimateState;
+    // const setAnimate =
+    //   setAnimateProp !== undefined ? setAnimateProp : setAnimateState;
     
     return (
-      <SidebarContext.Provider value={{ open, setOpen, animate, setAnimate }}>
+      <SidebarContext.Provider value={{ open, setOpen, animate: animate!, }}>
       {children}
       </SidebarContext.Provider>
     );

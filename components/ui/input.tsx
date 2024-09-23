@@ -1,12 +1,9 @@
 // Input component extends from shadcnui - https://ui.shadcn.com/docs/components/input
-"use client";
 import * as React from "react";
 import { useMotionTemplate, useMotionValue, motion } from "framer-motion";
 import { cn } from "@/utils/classes.utils";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {}
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {

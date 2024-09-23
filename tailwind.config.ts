@@ -1,14 +1,4 @@
 import type { Config } from "tailwindcss";
-// import svgToDataUri from "mini-svg-data-uri";
-import colors from "tailwindcss/colors";
-import { default as flattenColorPalette } from "tailwindcss/lib/util/flattenColorPalette";
-
-// const svgToDataUri = require("mini-svg-data-uri");
-
-// const colors = require("tailwindcss/colors");
-// const {
-//   default: flattenColorPalette,
-// } = require("tailwindcss/lib/util/flattenColorPalette");
 
 const config = {
   darkMode: ["class"],
@@ -29,60 +19,76 @@ const config = {
       },
     },
     extend: {
-      // colors: {
-      //   black: {
-      //     DEFAULT: "#000",
-      //     100: "#000319",
-      //     200: "rgba(17, 25, 40, 0.75)",
-      //     300: "rgba(255, 255, 255, 0.125)",
-      //   },
-      //   white: {
-      //     DEFAULT: "#FFF",
-      //     100: "#BEC1DD",
-      //     200: "#C1C2D3",
-      //   },
-      //   blue: {
-      //     "100": "#E4ECFF",
-      //   },
-      //   purple: "#CBACF9",
-      //   border: "hsl(var(--border))",
-      //   input: "hsl(var(--input))",
-      //   ring: "hsl(var(--ring))",
-      //   background: "hsl(var(--background))",
-      //   foreground: "hsl(var(--foreground))",
-      //   primary: {
-      //     DEFAULT: "hsl(var(--primary))",
-      //     foreground: "hsl(var(--primary-foreground))",
-      //   },
-      //   secondary: {
-      //     DEFAULT: "hsl(var(--secondary))",
-      //     foreground: "hsl(var(--secondary-foreground))",
-      //   },
-      //   destructive: {
-      //     DEFAULT: "hsl(var(--destructive))",
-      //     foreground: "hsl(var(--destructive-foreground))",
-      //   },
-      //   muted: {
-      //     DEFAULT: "hsl(var(--muted))",
-      //     foreground: "hsl(var(--muted-foreground))",
-      //   },
-      //   accent: {
-      //     DEFAULT: "hsl(var(--accent))",
-      //     foreground: "hsl(var(--accent-foreground))",
-      //   },
-      //   popover: {
-      //     DEFAULT: "hsl(var(--popover))",
-      //     foreground: "hsl(var(--popover-foreground))",
-      //   },
-      //   card: {
-      //     DEFAULT: "hsl(var(--card))",
-      //     foreground: "hsl(var(--card-foreground))",
-      //   },
-      // },
+      colors: {
+          black: {
+            DEFAULT: "#000",
+            100: "#000319",
+            200: "rgba(17, 25, 40, 0.75)",
+            300: "rgba(255, 255, 255, 0.125)",
+          },
+        //   white: {
+        //     DEFAULT: "#FFF",
+        //     100: "#BEC1DD",
+        //     200: "#C1C2D3",
+        //   },
+        //   blue: {
+        //     "100": "#E4ECFF",
+        //   },
+        //   purple: "#CBACF9",
+        //   border: "hsl(--border)",
+        //   input: "hsl(--input)",
+        //   ring: "hsl(--ring)",
+        //   background: "hsl(--background)",
+        //   foreground: "hsl(--foreground)",
+        primary: {
+          DEFAULT: "hsl(210, 25%, 20%)", // Light mode primary color
+          foreground: "hsl(220, 20%, 98%)", // Light mode foreground color
+          dark: "hsl(0, 0%, 88%)", // Dark mode primary color (equivalent to neutral 200)
+          darkForeground: "hsl(220, 20%, 15%)", // Dark mode foreground color
+        },
+        secondary: {
+          DEFAULT: "hsl(150,60%,45%)", // Light mode secondary color
+          foreground: "hsl(150, 90%, 98%)", // Light mode secondary foreground color
+          dark: "hsl(150,60%,75%)", // Dark mode secondary color
+          darkForeground: "hsl(150, 90%, 20%)", // Dark mode secondary foreground color
+        },
+        destructive: {
+          DEFAULT: "hsl(0, 70%, 60%)", // Light mode destructive color (Red 500 equivalent)
+          foreground: "hsl(0, 0%, 10%)", // Light mode destructive foreground (Dark Gray)
+          dark: "hsl(0, 50%, 50%)", // Dark mode destructive color (Red 600 equivalent)
+          darkForeground: "hsl(0, 0%, 90%)", // Dark mode destructive foreground (Light Gray)
+        },
+        muted: {
+          DEFAULT: "hsl(210, 15%, 80%)", // Light mode muted color (Gray 300 equivalent)
+          foreground: "hsl(210, 10%, 20%)", // Light mode muted foreground (Dark Gray)
+          dark: "hsl(210, 15%, 30%)", // Dark mode muted color (Gray 700 equivalent)
+          darkForeground: "hsl(210, 5%, 90%)", // Dark mode muted foreground (Light Gray)
+        },
+        accent: {
+          DEFAULT: "hsl(45,100%,55%)", // Light mode accent color
+          foreground: "hsl(45, 100%, 55%)", // Light mode accent foreground
+          dark: "hsl(45, 100%, 45%)", // Dark mode accent color
+          darkForeground: "hsl(45, 100%, 90%)", // Dark mode accent foreground
+        },
+        outline: {
+          DEFAULT: "hsl(210,10%,85%)", // Light mode outline color
+          foreground: "hsl(210, 25%, 20%)", // Light mode outline foreground
+          dark: "hsl(210, 10%, 40%)", // Dark mode outline color
+          darkForeground: "hsl(210, 25%, 90%)", // Dark mode outline foreground
+        },
+        //   popover: {
+        //     DEFAULT: "hsl(--popover)",
+        //     foreground: "hsl(--popover-foreground)",
+        //   },
+          card: {
+            DEFAULT: "hsl(--card)",
+            foreground: "hsl(--card-foreground)",
+          },
+      },
       // borderRadius: {
       //   lg: "var(--radius)",
-      //   md: "calc(var(--radius) - 2px)",
-      //   sm: "calc(var(--radius) - 4px)",
+      //   md: "calc(--radius) - 2px)",
+      //   sm: "calc(--radius) - 4px)",
       // },
       // keyframes: {
       //   "accordion-down": {
@@ -146,7 +152,7 @@ const config = {
       //   },
       //   scroll: {
       //     to: {
-      //       transform: "translate(calc(-50% - 0.5rem))",
+      //       transform: "translate(calc(-50% - 0.5rem)",
       //     },
       //   },
       // },
@@ -168,46 +174,6 @@ const config = {
       },
     },
   },
-  plugins: [
-    // require("tailwindcss-animate"),
-    addVariablesForColors,
-    // function ({ matchUtilities, theme }: any) {
-    //   matchUtilities(
-    //     {
-    //       "bg-grid": (value: any) => ({
-    //         backgroundImage: `url("${svgToDataUri(
-    //           `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="100" height="100" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
-    //         )}")`,
-    //       }),
-    //       "bg-grid-small": (value: any) => ({
-    //         backgroundImage: `url("${svgToDataUri(
-    //           `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="8" height="8" fill="none" stroke="${value}"><path d="M0 .5H31.5V32"/></svg>`
-    //         )}")`,
-    //       }),
-    //       "bg-dot": (value: any) => ({
-    //         backgroundImage: `url("${svgToDataUri(
-    //           `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="16" height="16" fill="none"><circle fill="${value}" id="pattern-circle" cx="10" cy="10" r="1.6257413380501518"></circle></svg>`
-    //         )}")`,
-    //       }),
-    //     },
-    //     { values: flattenColorPalette(theme("backgroundColor")), type: "color" }
-    //   );
-    // },
-  ],
 } satisfies Config;
-
-function addVariablesForColors({
-  addBase,
-  theme,
-}: any) {
-  const allColors = flattenColorPalette(theme.colors);
-  const newVars: Record<string, string> = Object.fromEntries(
-    Object.entries(allColors).map(([key, val]) => [`--${key}`, val as string])
-  );
-
-  addBase({
-    ":root": newVars,
-  });
-}
 
 export default config;

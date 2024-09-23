@@ -1,19 +1,24 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-"use client";
-
 import { cn } from "@/utils/classes.utils";
+import useDraw from "@/utils/hooks/useDraw";
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
+interface _IVanishingInput {
+  placeholders: string[];
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  defaultValue: string;
+  isPending: boolean;
+  disabled?: boolean;
+}
 export function PlaceholdersAndVanishInput({
   placeholders,
   onChange,
-  onSubmit,
-}: {
-  placeholders: string[];
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-}) {
+  defaultValue,
+  isPending,
+  disabled,
+}: // onSubmit,
+_IVanishingInput) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -41,70 +46,18 @@ export function PlaceholdersAndVanishInput({
       }
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [placeholders]);
+
+  const searchId = useId();
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const newDataRef = useRef<any[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue);
   const [animating, setAnimating] = useState(false);
 
-  const draw = useCallback(() => {
-    if (!inputRef.current) return;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    canvas.width = 800;
-    canvas.height = 800;
-    ctx.clearRect(0, 0, 800, 800);
-    const computedStyles = getComputedStyle(inputRef.current);
-
-    const fontSize = parseFloat(computedStyles.getPropertyValue("font-size"));
-    ctx.font = `${fontSize * 2}px ${computedStyles.fontFamily}`;
-    ctx.fillStyle = "#FFF";
-    ctx.fillText(value, 16, 40);
-
-    const imageData = ctx.getImageData(0, 0, 800, 800);
-    const pixelData = imageData.data;
-    const newData: any[] = [];
-
-    for (let t = 0; t < 800; t++) {
-      const i = 4 * t * 800;
-      for (let n = 0; n < 800; n++) {
-        const e = i + 4 * n;
-        if (
-          pixelData[e] !== 0 &&
-          pixelData[e + 1] !== 0 &&
-          pixelData[e + 2] !== 0
-        ) {
-          newData.push({
-            x: n,
-            y: t,
-            color: [
-              pixelData[e],
-              pixelData[e + 1],
-              pixelData[e + 2],
-              pixelData[e + 3],
-            ],
-          });
-        }
-      }
-    }
-
-    newDataRef.current = newData.map(({ x, y, color }) => ({
-      x,
-      y,
-      r: 1,
-      color: `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`,
-    }));
-  }, [value]);
-
-  useEffect(() => {
-    draw();
-  }, [value, draw]);
+  const { draw } = useDraw(canvasRef, newDataRef, inputRef, value);
 
   const animate = (start: number) => {
     const animateFrame = (pos: number = 0) => {
@@ -158,9 +111,11 @@ export function PlaceholdersAndVanishInput({
   };
 
   const vanishAndSubmit = () => {
+    if (!isPending) return;
     setAnimating(true);
     draw();
 
+    console.log(inputRef.current?.value);
     const value = inputRef.current?.value || "";
     if (value && inputRef.current) {
       const maxX = newDataRef.current.reduce(
@@ -171,18 +126,43 @@ export function PlaceholdersAndVanishInput({
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    vanishAndSubmit();
-    onSubmit && onSubmit(e);
-  };
+  // const renderPlaceholders = () => (
+  //   <div className="absolute inset-0 flex items-center rounded-full pointer-events-none">
+  //     <AnimatePresence mode="wait">
+  //       {!value && (
+  //         <motion.p
+  //           initial={{
+  //             y: 5,
+  //             opacity: 0,
+  //           }}
+  //           key={`current-placeholder-${currentPlaceholder}`}
+  //           animate={{
+  //             y: 0,
+  //             opacity: 1,
+  //           }}
+  //           exit={{
+  //             y: -15,
+  //             opacity: 0,
+  //           }}
+  //           transition={{
+  //             duration: 0.3,
+  //             ease: "linear",
+  //           }}
+  //           className="dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-4 sm:pl-12 text-left w-[calc(100%-2rem)] truncate"
+  //         >
+  //           {placeholders[currentPlaceholder]}
+  //         </motion.p>
+  //       )}
+  //     </AnimatePresence>
+  //   </div>
+  // );
+
   return (
-    <form
+    <div
       className={cn(
         "w-full relative max-w-xl mx-auto bg-white dark:bg-zinc-800 h-12 rounded-full overflow-hidden shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),_0px_1px_0px_0px_rgba(25,28,33,0.02),_0px_0px_0px_1px_rgba(25,28,33,0.08)] transition duration-200",
         value && "bg-gray-50"
       )}
-      onSubmit={handleSubmit}
     >
       <canvas
         className={cn(
@@ -191,6 +171,10 @@ export function PlaceholdersAndVanishInput({
         )}
         ref={canvasRef}
       />
+      <label htmlFor={searchId} className="sr-only">
+        Search
+      </label>
+
       <input
         onChange={(e) => {
           if (!animating) {
@@ -198,6 +182,7 @@ export function PlaceholdersAndVanishInput({
             onChange && onChange(e);
           }
         }}
+        id={searchId}
         onKeyDown={handleKeyDown}
         ref={inputRef}
         value={value}
@@ -209,7 +194,7 @@ export function PlaceholdersAndVanishInput({
       />
 
       <button
-        disabled={!value}
+        disabled={disabled}
         type="submit"
         className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"
       >
@@ -244,35 +229,7 @@ export function PlaceholdersAndVanishInput({
           <path d="M13 6l6 6" />
         </motion.svg>
       </button>
-
-      <div className="absolute inset-0 flex items-center rounded-full pointer-events-none">
-        <AnimatePresence mode="wait">
-          {!value && (
-            <motion.p
-              initial={{
-                y: 5,
-                opacity: 0,
-              }}
-              key={`current-placeholder-${currentPlaceholder}`}
-              animate={{
-                y: 0,
-                opacity: 1,
-              }}
-              exit={{
-                y: -15,
-                opacity: 0,
-              }}
-              transition={{
-                duration: 0.3,
-                ease: "linear",
-              }}
-              className="dark:text-zinc-500 text-sm sm:text-base font-normal text-neutral-500 pl-4 sm:pl-12 text-left w-[calc(100%-2rem)] truncate"
-            >
-              {placeholders[currentPlaceholder]}
-            </motion.p>
-          )}
-        </AnimatePresence>
-      </div>
-    </form>
+      {/* {renderPlaceholders()} */}
+    </div>
   );
 }
