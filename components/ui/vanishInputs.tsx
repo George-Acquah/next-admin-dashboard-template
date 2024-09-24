@@ -196,6 +196,7 @@ _IVanishingInput) {
       <button
         disabled={disabled}
         type="submit"
+        aria-label="Submit Search Button"
         className="absolute right-2 top-1/2 z-50 -translate-y-1/2 h-8 w-8 rounded-full disabled:bg-gray-100 bg-black dark:bg-zinc-900 dark:disabled:bg-zinc-800 transition duration-200 flex items-center justify-center"
       >
         <motion.svg

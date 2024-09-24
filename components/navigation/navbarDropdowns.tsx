@@ -1,5 +1,8 @@
 "use client";
-import { AdjustmentsHorizontalIcon, BellAlertIcon } from "@heroicons/react/24/outline";
+import {
+  AdjustmentsHorizontalIcon,
+  BellAlertIcon,
+} from "@heroicons/react/24/outline";
 import { Typography } from "../ui/typography";
 import {
   DropdownMenu,
@@ -9,16 +12,33 @@ import {
   DropdownMenuSeparator,
 } from "../ui/dropdown";
 import { notificationsData } from "@/data/sidebar.data";
-import { truncateMessage } from "@/utils/root.utils";
+import { getDropdownStyles, truncateMessage } from "@/utils/root.utils";
 import Avatar from "../ui/avatar";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
+import useIsMobile from "@/utils/hooks/useMobileView";
 
 const NavbarDropdowns = ({ user }: { user: any }) => {
   const notificationsCount = 5;
   const digitCount = notificationsCount.toString().length; // Get the number of digits
   // const dropDownSubMenuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const isMobile = useIsMobile(); // Check if the screen size is mobile
+  const notificationStyles = getDropdownStyles(
+    "-10rem", // mobile left
+    "100%", // mobile top
+    "-8rem", // desktop left
+    "100%", // desktop top
+    isMobile // isMobile boolean
+  );
+  const profileStyles = getDropdownStyles(
+    "-12rem", // mobile left
+    "100%", // mobile top
+    "-10.5rem", // desktop left
+    "100%", // desktop top
+    isMobile // isMobile boolean
+  );
+
   return (
     <div className="flex items-center gap-6">
       <DropdownMenu
@@ -39,10 +59,7 @@ const NavbarDropdowns = ({ user }: { user: any }) => {
             </div>
           </div>
         }
-        style={{
-          left: "-8rem", // Adjust this value as needed to position it on the left
-          top: "100%", // Position it below the trigger
-        }}
+        style={notificationStyles}
         className="dark:bg-neutral-800 bg-white ring-1 ring-black w-56 rounded-md px-1"
       >
         {(onClose) => (
@@ -96,10 +113,7 @@ const NavbarDropdowns = ({ user }: { user: any }) => {
             />
           </div>
         }
-        style={{
-          left: "-10rem", // Adjust this value as needed to position it on the left
-          top: "100%", // Position it below the trigger
-        }}
+        style={profileStyles}
         className="dark:bg-neutral-800 bg-white ring-1 ring-black w-56 rounded-md px-1"
       >
         {(onClose) => (
@@ -111,10 +125,15 @@ const NavbarDropdowns = ({ user }: { user: any }) => {
               </Typography>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <Button variant="default" size="lg" className="w-full" onClick={() => {
-              router.push('/dashboard/profile')
-              onClose();
-            }}>
+            <Button
+              variant="default"
+              size="lg"
+              className="w-full"
+              onClick={() => {
+                router.push("/dashboard/profile");
+                onClose();
+              }}
+            >
               View Profile
             </Button>
           </DropdownMenuContent>

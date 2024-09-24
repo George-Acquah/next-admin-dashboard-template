@@ -20,13 +20,19 @@ interface _ILinks {
   icon: React.JSX.Element | React.ReactNode;
 }
 
+interface _IEntityData {
+  count: number;
+  type: string;
+}
+
+
 interface _ITooltipItem {
   id: number;
   name: string;
   designation?: string;
   image?: string;
   icon?: any;
-  theme?: 'dark' | 'light';
+  theme: string;
 }
 
 interface _IChildren {

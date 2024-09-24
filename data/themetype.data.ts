@@ -17,7 +17,7 @@ export const themesTypeData: _ITooltipItem[] = [
   {
     id: 3,
     name: "System Default",
-    theme: undefined,
+    theme: 'system',
     icon: WrenchIcon,
   },
 ];

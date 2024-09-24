@@ -9,6 +9,7 @@ const ConfigurationButton = () => {
     <Button
       size="icon"
       variant="default"
+      aria-label="Configuration Button"
       className="fixed bg-neutral-200 dark:bg-neutral-600 bottom-8 right-8 z-40 rounded-full shadow-inner "
       onClick={() => setOpenConfigurator(dispatch, true)}
     >

@@ -22,7 +22,7 @@ export const AnimatedTooltip = ({
   className = "-top-16 -left-1/2 translate-x-1/2",
 }: _ITooltip) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const { setTheme } = useTheme();
+  const { theme, setTheme, systemTheme } = useTheme();
   const springConfig = { stiffness: 100, damping: 5 };
   const x = useMotionValue(0); // going to set this value on mouse move
   // rotate the tooltip
@@ -35,20 +35,26 @@ export const AnimatedTooltip = ({
     useTransform(x, [-100, 100], [-50, 50]),
     springConfig
   );
+
+  // Resolve the theme if "system" is selected
+  const resolvedTheme = (theme: string ) => theme === "system" ? systemTheme : theme;
+
   const handleMouseMove = (event: any) => {
     const halfWidth = event.target.offsetWidth / 2;
     x.set(event.nativeEvent.offsetX - halfWidth); // set the x value, which is then used in transform and rotate
   };
 
-  const renderIcon = (icon: any, themeProp?: "dark" | "light") => {
+  const renderIcon = (icon: any, themeProp?: string) => {
     const Icon = icon;
     return (
-      <Button variant="default" size="default" className="px-2 py-2">
+      <Button
+        onMouseMove={handleMouseMove}
+        variant="default"
+        size="default"
+        className="px-2 py-2"
+      >
         <Icon
-          onMouseMove={handleMouseMove}
-          onClick={() =>
-            setTheme(themeProp === undefined ? "system" : themeProp)
-          }
+          onClick={() => setTheme(themeProp ?? "system")}
           className="object-cover !m-0 !p-0 object-top h-8 w-8 group-hover:scale-105 group-hover:z-30 relative transition duration-500"
         />
       </Button>
@@ -85,7 +91,7 @@ export const AnimatedTooltip = ({
                   whiteSpace: "nowrap",
                 }}
                 className={cn(
-                  "absolute  flex text-xs flex-col items-center justify-center rounded-md bg-black z-50 shadow-xl px-4 py-2",
+                  "absolute flex text-xs flex-col items-center justify-center rounded-md bg-black z-50 shadow-xl px-4 py-2",
                   className
                 )}
               >
@@ -110,7 +116,7 @@ export const AnimatedTooltip = ({
               className="object-cover !m-0 !p-0 object-top rounded-full h-14 w-14 border-2 group-hover:scale-105 group-hover:z-30 border-white relative transition duration-500"
             />
           )}
-          {item.icon && renderIcon(item.icon, item.theme)}
+          {item.icon && renderIcon(item.icon, resolvedTheme(item.theme))}
         </div>
       ))}
     </>

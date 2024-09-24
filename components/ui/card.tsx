@@ -23,9 +23,9 @@ const CardHeader = React.forwardRef<HTMLDivElement, _TRefDivElement>(({ classNam
 CardHeader.displayName = "CardHeader";
 
 const CardTitle = React.forwardRef<HTMLDivElement, _TRefDivElement>(({ className, ...props }, ref) => (
-  <h3
+  <div
     ref={ref}
-    className={cn("font-semibold leading-none tracking-tight", className)}
+    className={cn("", className)}
     {...props}
   />
 ));

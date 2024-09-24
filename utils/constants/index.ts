@@ -10,3 +10,8 @@ export const clientCookiesValues = {
   GLOBAL_DARK_THEME: "dark",
   GLOBAL_SYSTEM_THEME: "system",
 };
+
+export const THEME = {
+  mainBg: "bg-white dark:bg-neutral-900",
+  secBg: "bg-neutral-100 dark:bg-neutral-800",
+};

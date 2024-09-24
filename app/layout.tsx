@@ -44,7 +44,7 @@ export default function RootLayout({
         <Providers
           animate={true}
           attribute="class"
-          defaultTheme={'dark'}
+          // defaultTheme={'dark'}
           enableSystem
           disableTransitionOnChange
         >

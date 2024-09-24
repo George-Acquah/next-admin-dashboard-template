@@ -20,17 +20,17 @@ const config = {
     },
     extend: {
       colors: {
-          black: {
-            DEFAULT: "#000",
-            100: "#000319",
-            200: "rgba(17, 25, 40, 0.75)",
-            300: "rgba(255, 255, 255, 0.125)",
-          },
-        //   white: {
-        //     DEFAULT: "#FFF",
-        //     100: "#BEC1DD",
-        //     200: "#C1C2D3",
-        //   },
+        black: {
+          DEFAULT: "#000",
+          100: "#000319",
+          200: "rgba(17, 25, 40, 0.75)",
+          300: "rgba(255, 255, 255, 0.125)",
+        },
+        white: {
+          DEFAULT: "#FFF",
+          100: "#BEC1DD",
+          200: "#C1C2D3",
+        },
         //   blue: {
         //     "100": "#E4ECFF",
         //   },
@@ -49,7 +49,7 @@ const config = {
         secondary: {
           DEFAULT: "hsl(150,60%,45%)", // Light mode secondary color
           foreground: "hsl(150, 90%, 98%)", // Light mode secondary foreground color
-          dark: "hsl(150,60%,75%)", // Dark mode secondary color
+          dark: "hsl(150,60%,55%)", // Dark mode secondary color
           darkForeground: "hsl(150, 90%, 20%)", // Dark mode secondary foreground color
         },
         destructive: {
@@ -70,6 +70,12 @@ const config = {
           dark: "hsl(45, 100%, 45%)", // Dark mode accent color
           darkForeground: "hsl(45, 100%, 90%)", // Dark mode accent foreground
         },
+        warning: {
+          DEFAULT: "hsl(30,70%,50%)", // Light mode accent color
+          foreground: "hsl(45, 100%, 55%)", // Light mode accent foreground
+          dark: "hsl(30,70%,60%)", // Dark mode accent color
+          darkForeground: "hsl(45, 100%, 90%)", // Dark mode accent foreground
+        },
         outline: {
           DEFAULT: "hsl(210,10%,85%)", // Light mode outline color
           foreground: "hsl(210, 25%, 20%)", // Light mode outline foreground
@@ -80,10 +86,10 @@ const config = {
         //     DEFAULT: "hsl(--popover)",
         //     foreground: "hsl(--popover-foreground)",
         //   },
-          card: {
-            DEFAULT: "hsl(--card)",
-            foreground: "hsl(--card-foreground)",
-          },
+        card: {
+          DEFAULT: "hsl(--card)",
+          foreground: "hsl(--card-foreground)",
+        },
       },
       // borderRadius: {
       //   lg: "var(--radius)",

@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 import { cn } from "@/utils/classes.utils";
 
 // Define the HTML elements and Typography color types
-type _TTypographyVariants =
+export type _TTypographyVariants =
   | "h1"
   | "h2"
   | "h3"
@@ -16,7 +16,7 @@ type _TTypographyVariants =
   | "em"
   | "blockquote";
 
-type _TTypographyColors =
+export type _TTypographyColors =
   | "default"
   | "primary"
   | "secondary"

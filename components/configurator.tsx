@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useRef } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { setFixedNavbar, setOpenConfigurator, setSidenavColor, setSidenavType, useConfigurator } from "@/utils/contexts/configurator.context";
 import { Typography } from "./ui/typography";
@@ -8,6 +8,7 @@ import { AnimatedTooltip } from "./ui/tooltip";
 import { themesTypeData } from "@/data/themetype.data";
 import { Switch } from "./ui/switch";
 import { GitHubIcon } from "./ui/icons";
+import { useOutsideClick } from "@/utils/hooks/useOutsideClick";
 
 interface _Indexer {
   [key: string]: string;
@@ -45,6 +46,8 @@ function Configurator() {
   const { openConfigurator, sidenavColor, sidenavType, fixedNavbar } =
     state;
   const [stars, setStars] = React.useState('0');
+  const configuratorRef = useRef(null);
+  useOutsideClick(configuratorRef, () => setOpenConfigurator(dispatch, false));
 
   const sidenavColors: _Indexer = {
     white: "from-gray-100 to-gray-100 border-gray-200",
@@ -61,6 +64,7 @@ function Configurator() {
 
   return (
     <aside
+      ref={configuratorRef}
       className={`fixed top-0 right-0 z-50 h-screen w-96 bg-white dark:bg-neutral-800 px-2.5 shadow-lg transition-transform duration-300 ${
         openConfigurator ? "translate-x-0" : "translate-x-96"
       }`}
@@ -75,10 +79,13 @@ function Configurator() {
         <Button
           variant="default"
           size="icon"
-          color="blue-gray"
+          className="bg-transparent dark:bg-transparent shadow-none hover:bg-neutral-100 dark:hover:bg-neutral-700"
           onClick={() => setOpenConfigurator(dispatch, false)}
         >
-          <XMarkIcon strokeWidth={2.5} className="h-5 w-5" />
+          <XMarkIcon
+            strokeWidth={2.5}
+            className="h-5 w-5 text-primary dark:text-primary-dark "
+          />
         </Button>
       </div>
       <div className="py-4 px-6">
