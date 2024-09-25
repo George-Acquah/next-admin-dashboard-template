@@ -44,12 +44,13 @@ export const AnimatedTooltip = ({
     x.set(event.nativeEvent.offsetX - halfWidth); // set the x value, which is then used in transform and rotate
   };
 
-  const renderIcon = (icon: any, themeProp?: string) => {
+  const renderIcon = (icon: any, name: string, themeProp?: string) => {
     const Icon = icon;
     return (
       <Button
         onMouseMove={handleMouseMove}
         variant="default"
+        aria-label={name}
         size="default"
         className="px-2 py-2"
       >
@@ -116,7 +117,7 @@ export const AnimatedTooltip = ({
               className="object-cover !m-0 !p-0 object-top rounded-full h-14 w-14 border-2 group-hover:scale-105 group-hover:z-30 border-white relative transition duration-500"
             />
           )}
-          {item.icon && renderIcon(item.icon, resolvedTheme(item.theme))}
+          {item.icon && renderIcon(item.icon, item.name, resolvedTheme(item.theme))}
         </div>
       ))}
     </>
