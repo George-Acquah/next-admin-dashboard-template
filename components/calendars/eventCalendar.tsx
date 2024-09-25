@@ -1,7 +1,6 @@
 "use client";
 
 import { THEME } from "@/utils/constants";
-import Image from "next/image";
 import { useState } from "react";
 import ReactCalendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
