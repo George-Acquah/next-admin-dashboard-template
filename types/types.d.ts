@@ -25,6 +25,16 @@ interface _IEntityData {
   type: string;
 }
 
+interface _ITableProps {
+  header: string;
+  accessor: string;
+  className?: string;
+}
+interface _ITableHeaderRowContents {
+  columns: _ITableProps[];
+  renderRow: (items: any) => React.ReactNode;
+  data: any[];
+}
 
 interface _ITooltipItem {
   id: number;
