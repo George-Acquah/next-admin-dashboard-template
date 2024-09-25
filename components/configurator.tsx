@@ -79,6 +79,7 @@ function Configurator() {
         <Button
           variant="default"
           size="icon"
+          aria-label="Close Configurator"
           className="bg-transparent dark:bg-transparent shadow-none hover:bg-neutral-100 dark:hover:bg-neutral-700"
           onClick={() => setOpenConfigurator(dispatch, false)}
         >
@@ -114,6 +115,7 @@ function Configurator() {
           <div className="mt-3 flex items-center gap-2">
             <Button
               variant={sidenavType === "dark" ? "default" : "outline"}
+              aria-label="Dark Navbar"
               onClick={() => setSidenavType(dispatch, "dark")}
               size="default"
             >
@@ -123,6 +125,7 @@ function Configurator() {
               variant={sidenavType === "transparent" ? "default" : "outline"}
               onClick={() => setSidenavType(dispatch, "transparent")}
               size="default"
+              aria-label="Transparent Navbar"
             >
               Transparent
             </Button>
@@ -130,6 +133,7 @@ function Configurator() {
               variant={sidenavType === "white" ? "default" : "outline"}
               onClick={() => setSidenavType(dispatch, "white")}
               size="default"
+              aria-label="White Navbar"
             >
               White
             </Button>
@@ -140,6 +144,7 @@ function Configurator() {
           <div className="flex items-center justify-between py-5">
             <Typography variant="h6">Navbar Fixed</Typography>
             <Switch
+              aria-label="Navbar Fixed"
               id="navbar-fixed"
               checked={fixedNavbar}
               onSwitchToggle={() => setFixedNavbar(dispatch, !fixedNavbar)}
@@ -149,6 +154,7 @@ function Configurator() {
           <div className="my-8 flex flex-col gap-4">
             <a
               href="https://www.creative-tim.com/product/material-tailwind-dashboard-react?rel=mtdr"
+              aria-label="Free Download"
               target="_black"
             >
               <Button variant="default" size="default" className="w-full">
@@ -158,6 +164,7 @@ function Configurator() {
             <a
               href="https://www.material-tailwind.com/docs/react/installation?rel=mtdr"
               target="_black"
+              aria-label="View Documentation"
             >
               <Button variant="default" size="default" className="w-full">
                 View Documentation
@@ -166,6 +173,7 @@ function Configurator() {
             <a
               href="https://www.material-tailwind.com/blocks/react?rel=mtdr"
               target="_black"
+              aria-label="Go Pro"
             >
               <Button variant="outline" size="default" className="w-full">
                 Material Tailwind PRO
@@ -176,9 +184,15 @@ function Configurator() {
             className="mx-auto flex items-center justify-center gap-2"
             href="https://github.com/creativetimofficial/material-tailwind-dashboard-react"
             target="_blank"
+            aria-label="Open Githhub in new Tab"
             rel="noreferrer"
           >
-            <Button variant="default" size="default" className="px-4">
+            <Button
+              aria-label="Github Repo Stars"
+              variant="default"
+              size="default"
+              className="px-4"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
