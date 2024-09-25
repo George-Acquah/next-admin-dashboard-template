@@ -1,3 +1,4 @@
+import Announcements from "@/components/announcements";
 import EventCalendar from "@/components/calendars/eventCalendar";
 import InformationCards from "@/components/cards/infoCards";
 import CountChart from "@/components/charts/countChart";
@@ -39,6 +40,7 @@ const Dashboard = ({ searchParams }: _ISearchQuery) => {
       {/* Left */}
       <div className="w-full lg:w-1/3 flex flex-col gap-8">
         <EventCalendar />
+        <Announcements />
       </div>
     </div>
   );
