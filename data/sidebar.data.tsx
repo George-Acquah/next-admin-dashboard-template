@@ -1,4 +1,4 @@
-import { ArrowLeftEndOnRectangleIcon, CodeBracketIcon, Cog8ToothIcon, UserIcon  } from "@heroicons/react/24/outline"
+import { ArrowLeftEndOnRectangleIcon, BriefcaseIcon, ClipboardDocumentIcon, CodeBracketIcon, Cog8ToothIcon, UserIcon, UsersIcon  } from "@heroicons/react/24/outline"
 
 export const sidebarLinks: _ILinks[] = [
   {
@@ -9,8 +9,29 @@ export const sidebarLinks: _ILinks[] = [
     ),
   },
   {
-    label: "Profile",
-    href: "/profile",
+    label: "Projects",
+    href: "/dashboard/projects",
+    icon: (
+      <BriefcaseIcon className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+    ),
+  },
+  {
+    label: "Teams",
+    href: "/dashboard/teams",
+    icon: (
+      <UsersIcon className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+    ),
+  },
+  {
+    label: "Tasks",
+    href: "/dashboard/tasks",
+    icon: (
+      <ClipboardDocumentIcon className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
+    ),
+  },
+  {
+    label: "Clients",
+    href: "/dashboard/clients",
     icon: (
       <UserIcon className="text-neutral-700 dark:text-neutral-200 h-5 w-5 flex-shrink-0" />
     ),

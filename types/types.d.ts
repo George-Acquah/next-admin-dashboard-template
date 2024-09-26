@@ -34,11 +34,6 @@ interface _IApiResponse<T> extends _IPostApiResponse {
   data: T;
 }
 
-interface _ITableProps {
-  header: string;
-  accessor: string;
-  className?: string;
-}
 interface _ITableHeaderRowContents {
   columns: _ITableProps[];
   renderRow: (items: any) => React.ReactNode;
@@ -53,23 +48,35 @@ interface _IVerificationBtn {
 interface _IActionBtn {
   id: string;
   label: string;
-  action: (id: string) => Promise<_IApiResponse<unknown> | undefined>;
+  action: (id: string, path: string) => Promise<_IApiResponse<void> | undefined | void>;
+  path?: string;
 }
 
-interface _TableRowType {
-  [key: string]: string | number | null;
+interface _ITableSignature {
+  [key: string]: string | string[] | number | boolean | null | undefined; // Flexible for other dynamic fields
+}
+interface _TableRowType extends _ITableSignature{
+  _id: string; // Explicitly required
+  image?: string; // Required for rendering the image
+  description?: string;
 }
 
 interface _ITableProps<T = _TableRowType[]> {
-  query: string;
-  currentPage: number;
+  query?: string;
+  currentPage?: number;
   columnData: string[];
   entityType: string;
-  deleteAction: (id: string) => Promise<_IApiResponse<unknown> | undefined>;
-  // deleteAction: (id: string) => Promise<_IApiResponse<T> | undefined>;
+  deleteAction: (id: string, path: string) => Promise<_IApiResponse<void> | undefined| void>;
   data?: T;
   type?: string;
 }
+
+interface _ISpecificTableProps {
+  query: string;
+  currentPage: number;
+  pageSize: number;
+}
+
 
 interface _ITooltipItem {
   id: number;
