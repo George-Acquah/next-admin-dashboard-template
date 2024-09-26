@@ -35,6 +35,7 @@ const TableCheckbox = React.memo(
   )
 );
 
+
 // Render cell content based on the column type
 const renderCell = (
   entityType: string,
@@ -128,6 +129,17 @@ const TableComponent = ({
     new Set()
   );
 
+  if (!data || data.length === 0) {
+    return (
+      <NoContent
+        message="No data available"
+        subMessage="Try adding new items or refreshing the page."
+        onActionClick={() => console.log("Add New Item")}
+        actionLabel="Add New Item"
+      />
+    );
+  }
+
   // Toggle the selection of a single row
   const toggleRowSelection = (id: string) => {
     setSelectedRows((prev) => {
@@ -156,16 +168,7 @@ const TableComponent = ({
     onBulkUpdate(Array.from(selectedRows));
   };
 
-  if (!data || data.length === 0) {
-    return (
-      <NoContent
-        message="No data available"
-        subMessage="Try adding new items or refreshing the page."
-        onActionClick={() => console.log("Add New Item")}
-        actionLabel="Add New Item"
-      />
-    );
-  }
+  
 
   return (
     <>

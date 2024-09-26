@@ -25,6 +25,15 @@ interface _IEntityData {
   type: string;
 }
 
+interface _IPostApiResponse {
+  statusCode: number;
+  message: string;
+}
+
+interface _IApiResponse<T> extends _IPostApiResponse {
+  data: T;
+}
+
 interface _ITableProps {
   header: string;
   accessor: string;
@@ -34,6 +43,32 @@ interface _ITableHeaderRowContents {
   columns: _ITableProps[];
   renderRow: (items: any) => React.ReactNode;
   data: any[];
+}
+
+interface _IVerificationBtn {
+  id: string;
+  status: boolean;
+}
+
+interface _IActionBtn {
+  id: string;
+  label: string;
+  action: (id: string) => Promise<_IApiResponse<unknown> | undefined>;
+}
+
+interface _TableRowType {
+  [key: string]: string | number | null;
+}
+
+interface _ITableProps<T = _TableRowType[]> {
+  query: string;
+  currentPage: number;
+  columnData: string[];
+  entityType: string;
+  deleteAction: (id: string) => Promise<_IApiResponse<unknown> | undefined>;
+  // deleteAction: (id: string) => Promise<_IApiResponse<T> | undefined>;
+  data?: T;
+  type?: string;
 }
 
 interface _ITooltipItem {

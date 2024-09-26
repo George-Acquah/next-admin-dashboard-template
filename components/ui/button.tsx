@@ -5,6 +5,7 @@ import { cn } from "@/utils/classes.utils";
 export type _TButtonVariants = _TVariants | 'ghost' | 'link';
 interface _IButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   variant: _TButtonVariants;
+  buttonType?: "submit" | "reset" | "button";
   size: _TSizes;
 }
 
@@ -40,11 +41,12 @@ const buttonVariants = cva(
 );
 
 const Button = React.forwardRef<HTMLButtonElement, _IButtonProps>(
-  ({ className, variant, size, ...props }, ref) => {
+  ({ className, variant, buttonType, size, ...props }, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
+      type={buttonType}
         {...props}
       />
     );
