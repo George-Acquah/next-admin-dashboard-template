@@ -1,33 +1,47 @@
 "use client";
-
 import * as React from "react";
 import {
   Table,
-  TableHeader,
+  TableHead,
   TableRow,
   TableCell,
   TableBody,
   TableImageCell,
+  TableHeader,
 } from "@/components/ui/table"; // Import custom encapsulated components
-import { usePathname, useRouter } from "next/navigation";
-import { UserType } from "../../lib/constants";
-import { DeleteBtn, NormalEditBtn, VerificationButton } from "../users/buttons";
-import StatusBadge, { _IStatus } from "../users/status";
-import { cardBorder, cardsBg } from "../themes";
+import { usePathname } from "next/navigation";
+import { DeleteBtn, EditBtn } from "./buttons";
+import StatusBadge from "./status";
 import NoContent from "../ui/noContent";
+import { Typography } from "../ui/typography";
+
+// Helper function to identify boolean fields
+const getBooleanFields = (item: _TableRowType) => {
+  return Object.keys(item).filter((key) => typeof item[key] === "boolean");
+};
 
 // Reusable component for rendering the image cell
 const TableImage = React.memo(
   ({ src, desc }: { src: string; desc: string }) => (
-    <TableImageCell src={src} alt={desc ?? "user's avatar"} />
+    <TableImageCell src={src} alt={desc || "user's avatar"} />
   )
 );
 
 // Checkbox component for individual rows
 const TableCheckbox = React.memo(
-  ({ checked, onChange }: { checked: boolean; onChange: () => void }) => (
+  ({
+    checked,
+    id,
+    onChange,
+  }: {
+    checked: boolean;
+    id: string;
+    onChange: () => void;
+  }) => (
     <input
       type="checkbox"
+      aria-label={id}
+      id={id}
       className="form-checkbox h-4 w-4"
       checked={checked}
       onChange={onChange}
@@ -35,48 +49,28 @@ const TableCheckbox = React.memo(
   )
 );
 
+const renderCell = (column: string, item: _TableRowType) => {
+  const value = item[column];
 
-// Render cell content based on the column type
-const renderCell = (
-  entityType: string,
-  column: string,
-  item: _TableRowType,
-  id: string,
-  type = UserType.ALL
-) => {
+  // Handle array of strings
+  if (Array.isArray(value) && value.every((v) => typeof v === "string")) {
+    return (
+      <Typography variant="span" className="text-base font-mono">
+        {value.join(", ")} {/* Join array of strings with comma */}
+      </Typography>
+    );
+  }
+
   switch (column) {
     case "image":
       return (
-        <TableImage
-          src={item.image ?? ""}
-          desc={String(item.description ?? "")}
-        />
+        <TableImage src={item.image ?? ""} desc={item.description ?? ""} />
       );
-    case "isVerified":
-      return (
-        <div className="flex items-center gap-x-2">
-          <StatusBadge status={item[column] as _IStatus} />
-          <TableButtonHelper
-            id={id}
-            entityType={entityType}
-            type={type}
-            verify
-          />
-        </div>
-      );
-    case "isAvailable":
-    case "has_insurance":
-    case "has_reservation":
-      return <StatusBadge status={item[column] as _IStatus} />;
     default:
-      const additionalClassName =
-        typeof item[column] === "number" ? "text-center" : "";
       return (
-        <span
-          className={`${additionalClassName} text-base text-black font-mono font-semibold`}
-        >
-          {item[column]}
-        </span>
+        <Typography variant="span" className="text-base font-mono">
+          {value ?? "N/A"}
+        </Typography>
       );
   }
 };
@@ -87,32 +81,26 @@ const TableButtonHelper = React.memo(
     id,
     entityType,
     type,
-    verify,
-    status,
     deleteAction,
   }: {
     id: string;
     entityType: string;
     type?: string;
-    deleteAction?: (id: string) => Promise<_IApiResponse<unknown> | undefined>;
-    verify?: boolean;
-    status?: boolean;
+    deleteAction?: (
+      id: string,
+      path: string
+    ) => Promise<_IApiResponse<void> | undefined | void>;
   }) => {
     const pathname = usePathname();
 
-    const isVerification = verify && (
-      <VerificationButton id={id} status={status ?? false} />
-    );
-    const userActions = (
-      <div className="flex justify-end gap-3">
-        <NormalEditBtn href={`${pathname}/${id}/update`} />
+    return (
+      <div className="flex items-center gap-2">
+        <EditBtn href={`${pathname}/${id}/update`} />
         {deleteAction && (
           <DeleteBtn id={id} label={"Delete User"} action={deleteAction} />
         )}
       </div>
     );
-
-    return isVerification || userActions;
   }
 );
 
@@ -120,11 +108,9 @@ const TableButtonHelper = React.memo(
 const TableComponent = ({
   data,
   columnData,
-  type,
   entityType,
   deleteAction,
-  onBulkUpdate,
-}: _ITableProps & { onBulkUpdate: (selectedIds: string[]) => void }) => {
+}: _ITableProps) => {
   const [selectedRows, setSelectedRows] = React.useState<Set<string>>(
     new Set()
   );
@@ -162,30 +148,17 @@ const TableComponent = ({
       setSelectedRows(allIds); // Select all
     }
   };
-
-  // Perform bulk update with selected rows
-  const handleBulkUpdate = () => {
-    onBulkUpdate(Array.from(selectedRows));
-  };
-
-  
-
   return (
     <>
-      <button
-        onClick={handleBulkUpdate}
-        className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Bulk Update Selected
-      </button>
-      <Table
-        className={`mt-8 border border-t-0 rounded-sm min-h-[20rem] ${cardBorder} ${cardsBg}`}
-      >
-        <TableHeader>
-          <TableRow>
+      <TableHeader className="">Testing</TableHeader>
+      <Table className={""}>
+        <TableHead>
+          <TableRow isHeader>
             <TableCell isHeader className="px-6">
               <input
                 type="checkbox"
+                id="check-all"
+                aria-label="check-all"
                 className="form-checkbox h-4 w-4"
                 checked={selectedRows.size === data.length}
                 onChange={toggleSelectAll}
@@ -196,40 +169,46 @@ const TableComponent = ({
                 {column}
               </TableCell>
             ))}
-            <TableCell isHeader className="relative px-12">
-              <span className="sr-only">Edit</span>
-            </TableCell>
-            <TableCell isHeader className="relative px-2">
-              <span className="sr-only">Delete</span>
-            </TableCell>
+            {/* <TableCell isHeader className="relative px-2">
+            <span className="sr-only">Edit</span>
+          </TableCell>
+          <TableCell isHeader className="relative px-2">
+            <span className="sr-only">Delete</span>
+          </TableCell> */}
           </TableRow>
-        </TableHeader>
+        </TableHead>
         <TableBody>
           {data.map((item, index) => {
-            const columns = Object.keys(item);
+            const booleanFields = getBooleanFields(item); // Identify boolean fields
             const isSelected = selectedRows.has(item._id);
+
             return (
               <TableRow
-                key={`row-${index}`}
+                key={`row-${item._id}`}
                 className="px-6 align-middle border-none text-xs whitespace-nowrap p-4"
               >
                 <TableCell className="px-6">
                   <TableCheckbox
                     checked={isSelected}
+                    id={item._id}
                     onChange={() => toggleRowSelection(item._id)}
                   />
                 </TableCell>
-                {columns
-                  .filter((column) => !column.includes("_id"))
-                  .map((column, columnIndex) => (
-                    <TableCell key={`cell-${columnIndex}`} className="px-6">
-                      {renderCell(entityType, column, item, item._id, type)}
-                    </TableCell>
-                  ))}
+
+                {/* Render all columns, including dynamic and boolean fields */}
+                {columnData.map((column, columnIndex) => (
+                  <TableCell key={`cell-${columnIndex}`} className="px-6">
+                    {booleanFields.includes(column) ? (
+                      <StatusBadge status={item[column] as boolean} />
+                    ) : (
+                      renderCell(column, item)
+                    )}
+                  </TableCell>
+                ))}
+
                 <TableCell className="px-6">
                   {item["role"] !== "admin" && (
                     <TableButtonHelper
-                      type={type}
                       id={item._id}
                       entityType={entityType}
                       deleteAction={deleteAction}

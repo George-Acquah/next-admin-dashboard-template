@@ -10,6 +10,7 @@ type TableSectionProps = React.ComponentPropsWithoutRef<
 >;
 type TableRowProps = React.ComponentPropsWithoutRef<"tr"> & {
   className?: string;
+  isHeader?: boolean;
 };
 type TableCellProps = React.ComponentPropsWithoutRef<"td" | "th"> & {
   isHeader?: boolean;
@@ -29,23 +30,30 @@ type TableFooterProps = React.ComponentPropsWithoutRef<"div"> & {
 // Main table wrapper component
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, ...props }, ref) => (
-    <table
-      ref={ref}
-      className={cn("w-full mt-4 border-collapse", className)}
-      {...props}
-    />
+    <table ref={ref} className={cn("w-full mt-4", className)} {...props} />
   )
 );
 Table.displayName = "Table";
 
+const TableHeader = React.forwardRef<HTMLDivElement, TableTitleProps>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn("", className)}
+      {...props}
+    />
+  )
+);
+TableHeader.displayName = "TableHeader";
+
 // Table header, body, and footer sections
-const TableHeader = React.forwardRef<
+const TableHead = React.forwardRef<
   HTMLTableSectionElement,
   TableSectionProps
 >(({ className, ...props }, ref) => (
-  <thead ref={ref} className={cn("bg-gray-100", className)} {...props} />
+  <thead ref={ref} className={cn("", className)} {...props} />
 ));
-TableHeader.displayName = "TableHeader";
+TableHead.displayName = "TableHead";
 
 const TableBody = React.forwardRef<HTMLTableSectionElement, TableSectionProps>(
   ({ className, ...props }, ref) => (
@@ -64,10 +72,17 @@ TableFooter.displayName = "TableFooter";
 
 // Table row component
 const TableRow = React.forwardRef<HTMLTableRowElement, TableRowProps>(
-  ({ className, ...props }, ref) => (
+  ({ className, isHeader, ...props }, ref) => (
     <tr
       ref={ref}
-      className={cn("border-b border-gray-200", className)}
+      className={cn(
+        `${
+          isHeader
+            ? "border-b border-gray-200 dark:border-gray-600"
+            : "even:bg-slate-50 dark:even:bg-zinc-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 text-sm"
+        }`,
+        className
+      )}
       {...props}
     />
   )
@@ -82,10 +97,10 @@ const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
       <Component
         ref={ref}
         className={cn(
-          "px-6 py-4 text-sm",
+          "px-6 py-4 text-sm ",
           isHeader
-            ? "text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-            : "text-gray-900",
+            ? "text-left text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider"
+            : "border-b border-gray-200 dark:border-zinc-900",
           className
         )}
         {...props}
@@ -156,6 +171,7 @@ TableFooterContent.displayName = "TableFooterContent";
 export {
   Table,
   TableHeader,
+  TableHead,
   TableBody,
   TableFooter,
   TableRow,

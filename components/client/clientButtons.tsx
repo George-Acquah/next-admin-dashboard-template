@@ -1,19 +1,16 @@
 import { SvgSpinner } from '@/components/ui/icons';
 import { TrashIcon } from '@heroicons/react/24/outline';
 import { useFormStatus } from 'react-dom';
-import { Button } from '../ui/button';
 import { Typography } from '../ui/typography';
 
 export function DeleteClientBtn({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
-    <Button
-      variant='destructive'
-      size='default'
+    <button
       aria-disabled={pending}
       aria-label={label}
-      className=""
-      buttonType="submit"
+      className="w-7 h-7 flex items-center justify-center rounded-full text-primary-foreground bg-neutral-400 dark:bg-zinc-500"
+      type="submit"
     >
       {pending ? (
         <div className="flex items-center">
@@ -21,10 +18,12 @@ export function DeleteClientBtn({ label }: { label: string }) {
         </div>
       ) : (
         <>
-          <Typography variant='span' className="sr-only">{label}</Typography>
-          <TrashIcon className="w-4 fill-white" />
+          <Typography variant="span" className="sr-only">
+            {label}
+          </Typography>
+          <TrashIcon className="w-4 h-4" />
         </>
       )}
-    </Button>
+    </button>
   );
 }
