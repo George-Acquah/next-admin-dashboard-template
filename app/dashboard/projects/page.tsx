@@ -3,6 +3,7 @@ import { Metadata } from "next";
 import ProjectsTable from "@/components/tables/projectsTable";
 import SkeletonTable from "@/components/ui/skeletons";
 import { mockFetchData } from "@/lib/dataFetching";
+import Pagination from "@/components/ui/pagination";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -13,11 +14,13 @@ export default async function ParkingCenterPage({ searchParams }: _ISearchQuery)
   const currentPage = Number(searchParams?.page) || 1;
   const pageSize = Number(searchParams?.size) || 5;
 
-  const totalPages = await mockFetchData(
-    2,
-    {center,
-    pageSize,}
-  );
+  const totalPages = await mockFetchData(20, { center, pageSize });
+
+  // Determine if we're on the last page
+  const isLastPage = currentPage === totalPages;
+
+  const rowsToRender = isLastPage ? Math.ceil(pageSize / 2) : pageSize;
+  console.log(rowsToRender);
 
   return (
     <div className="">
@@ -31,16 +34,19 @@ export default async function ParkingCenterPage({ searchParams }: _ISearchQuery)
           label="Parking Center"
         />
       </div> */}
-      <Suspense key={center + currentPage} fallback={<SkeletonTable numRows={3} numColumns={4} />}>
+      <Suspense
+        key={center + currentPage}
+        fallback={<SkeletonTable rowsToRender={9}/>}
+      >
         <ProjectsTable
           query={center}
           currentPage={currentPage}
           pageSize={pageSize}
         />
       </Suspense>
-      {/* <div className="mt-5 flex w-full justify-center flex-wrap gap-2 space-x-10">
+      <div className="mt-5 w-full">
         <Pagination totalPages={totalPages} />
-      </div> */}
+      </div>
     </div>
   );
 }
