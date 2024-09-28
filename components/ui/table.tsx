@@ -1,4 +1,5 @@
 import * as React from "react";
+import Image from 'next/image'
 import { cn } from "@/utils/classes.utils";
 
 // Type definitions for all table components
@@ -17,6 +18,7 @@ type TableCellProps = React.ComponentPropsWithoutRef<"td" | "th"> & {
   className?: string;
 };
 type TableImageCellProps = { src: string; alt: string; className?: string };
+
 type TableTitleProps = React.ComponentPropsWithoutRef<"div"> & {
   className?: string;
 };
@@ -97,7 +99,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
       <Component
         ref={ref}
         className={cn(
-          "px-6 py-4 text-sm ",
+          "px-6 text-sm ",
           isHeader
             ? "text-left text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider"
             : "border-b border-gray-200 dark:border-zinc-900",
@@ -111,20 +113,22 @@ const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
 TableCell.displayName = "TableCell";
 
 // Specialized table image cell for avatars or images
-const TableImageCell = React.forwardRef<
-  HTMLTableCellElement,
-  TableImageCellProps
->(({ src, alt, className, ...props }, ref) => (
-  <td ref={ref} className={cn("px-6 py-4", className)} {...props}>
-    <div className="h-10 w-10 flex-shrink-0">
-      <img
-        className="h-10 w-10 rounded-full object-cover"
-        src={src}
-        alt={alt}
-      />
-    </div>
-  </td>
-));
+const TableImageCell = React.forwardRef<HTMLImageElement, TableImageCellProps>(
+  ({ src, alt, className, ...props }, ref) => (
+    <Image
+      ref={ref}
+      src={src}
+      alt={alt}
+      width={40}
+      height={40}
+      className={cn(
+        "w-9 h-9 rounded-full object-cover",
+        className
+      )}
+      {...props}
+    />
+  )
+);
 TableImageCell.displayName = "TableImageCell";
 
 // Table title component for a card-like display

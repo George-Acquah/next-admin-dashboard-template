@@ -8,8 +8,8 @@ interface StatusBadgeProps {
 }
 
 const defaultStyles = {
-  true: "bg-green-700 text-white", // Default style for "true" status
-  false: "bg-red-600 text-white", // Default style for "false" status
+  true: "bg-green-700 dark:bg-green-800 text-white", // Default style for "true" status
+  false: "bg-red-600 dark:bg-red-700 text-white", // Default style for "false" status
   default: "bg-gray-300 text-black", // Fallback for unknown statuses
 };
 

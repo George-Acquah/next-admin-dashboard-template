@@ -1,7 +1,7 @@
 'use client'
 import React, { useRef } from "react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import { setFixedNavbar, setOpenConfigurator, setSidenavColor, setSidenavType, useConfigurator } from "@/utils/contexts/configurator.context";
+import { setAnimateSidenav, setOpenConfigurator, setOpenSidenav, setSidenavColor, setSidenavType, useConfigurator } from "@/utils/contexts/configurator.context";
 import { Typography } from "./ui/typography";
 import { Button } from "./ui/button";
 import { AnimatedTooltip } from "./ui/tooltip";
@@ -43,7 +43,7 @@ function formatNumber(number: number, decPlaces: number) {
 
 function Configurator() {
   const { dispatch, state } = useConfigurator();
-  const { openConfigurator, sidenavColor, sidenavType, fixedNavbar } =
+  const { openConfigurator, sidenavColor, sidenavType, animateSidenav, openSidenav } =
     state;
   const [stars, setStars] = React.useState('0');
   const configuratorRef = useRef(null);
@@ -108,7 +108,7 @@ function Configurator() {
           </div>
         </div>
         <div className="mb-12">
-          <Typography variant="h6">Sidenav Types</Typography>
+          <Typography variant="h5">Sidenav Types</Typography>
           <Typography variant="p" color="secondary">
             Choose between 3 different sidenav types.
           </Typography>
@@ -140,17 +140,63 @@ function Configurator() {
           </div>
         </div>
         <div className="mb-12">
-          <hr />
-          <div className="flex items-center justify-between py-5">
-            <Typography variant="h6">Navbar Fixed</Typography>
+          <div className="h-[1px] bg-neutral-200 dark:bg-neutral-600" />
+          <Typography variant="h5" className="mt-4">
+            Sidenav Layout
+          </Typography>
+          <Typography variant="p" color="secondary">
+            Choose between 3 different sidenav layouts.
+          </Typography>
+          <div className="flex items-center justify-between py-3">
+            <Typography variant="h6">Open Sidebar Fixed</Typography>
             <Switch
-              aria-label="Navbar Fixed"
-              id="navbar-fixed"
-              checked={fixedNavbar}
-              onSwitchToggle={() => setFixedNavbar(dispatch, !fixedNavbar)}
+              aria-label="Open Sidebar Fixed"
+              id="sidenav-open-fixed"
+              className={`${
+                !animateSidenav && openSidenav
+                  ? ""
+                  : "hover:bg-secondary hover:bg-opacity-20"
+              }`}
+              checked={!animateSidenav && openSidenav}
+              onSwitchToggle={() => {
+                setAnimateSidenav(dispatch, false);
+                setOpenSidenav(dispatch, true);
+              }}
             />
           </div>
-          <hr />
+          <div className="flex items-center justify-between py-3">
+            <Typography variant="h6">Close Sidebar Fixed</Typography>
+            <Switch
+              aria-label="Close Sidebar Fixed"
+              id="sidenav-closed-fixed"
+              className={`${
+                !animateSidenav && !openSidenav
+                  ? ""
+                  : "hover:bg-secondary hover:bg-opacity-20"
+              }`}
+              checked={!animateSidenav && !openSidenav}
+              onSwitchToggle={() => {
+                setAnimateSidenav(dispatch, false);
+                setOpenSidenav(dispatch, false);
+              }}
+            />
+          </div>
+          <div className="flex items-center justify-between py-3">
+            <Typography variant="h6">Default</Typography>
+            <Switch
+              aria-label="Default Sidebar"
+              id="default-sidebar"
+              checked={animateSidenav}
+              className={`${
+                animateSidenav ? "" : "hover:bg-secondary hover:bg-opacity-20"
+              }`}
+              onSwitchToggle={() => {
+                setAnimateSidenav(dispatch, true);
+                setOpenSidenav(dispatch, false);
+              }}
+            />
+          </div>
+          <div className="h-[1px] bg-neutral-200 dark:bg-neutral-600" />
           <div className="my-8 flex flex-col gap-4">
             <a
               href="https://www.creative-tim.com/product/material-tailwind-dashboard-react?rel=mtdr"
@@ -161,7 +207,7 @@ function Configurator() {
                 Free Download
               </Button>
             </a>
-            <a
+            {/* <a
               href="https://www.material-tailwind.com/docs/react/installation?rel=mtdr"
               target="_black"
               aria-label="View Documentation"
@@ -169,8 +215,8 @@ function Configurator() {
               <Button variant="default" size="default" className="w-full">
                 View Documentation
               </Button>
-            </a>
-            <a
+            </a> */}
+            {/* <a
               href="https://www.material-tailwind.com/blocks/react?rel=mtdr"
               target="_black"
               aria-label="Go Pro"
@@ -178,7 +224,7 @@ function Configurator() {
               <Button variant="outline" size="default" className="w-full">
                 Material Tailwind PRO
               </Button>
-            </a>
+            </a> */}
           </div>
           <a
             className="mx-auto flex items-center justify-center gap-2"

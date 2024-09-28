@@ -2,20 +2,20 @@ import * as React from "react";
 import { cva } from "class-variance-authority";
 import { cn } from "@/utils/classes.utils";
 
-export type _TButtonVariants = _TVariants | 'ghost' | 'link';
-interface _IButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
+export type _TButtonVariants = _TVariants | "ghost" | "link";
+
+interface _IButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant: _TButtonVariants;
-  buttonType?: "submit" | "reset" | "button";
   size: _TSizes;
 }
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring aria-disabled:pointer-events-none aria-disabled:opacity-50",
   {
     variants: {
       variant: {
         default:
-          "bg-primary dark:bg-primary-dark text-primary-foreground dark:text-primary-darkForeground  shadow hover:bg-primary/80",
+          "bg-primary dark:bg-primary-dark text-primary-foreground dark:text-primary-darkForeground shadow hover:bg-primary/80",
         destructive:
           "bg-destructive dark:bg-destructive-dark text-destructive-foreground dark:text-destructive-darkForeground shadow-sm hover:bg-destructive/80 dark:hover:bg-destructive-dark/80",
         outline:
@@ -41,12 +41,12 @@ const buttonVariants = cva(
 );
 
 const Button = React.forwardRef<HTMLButtonElement, _IButtonProps>(
-  ({ className, variant, buttonType, size, ...props }, ref) => {
+  ({ className, variant, size, type = "button", ...props }, ref) => {
     return (
       <button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
-      type={buttonType}
+        type={type} // Using standard type instead of buttonType
         {...props}
       />
     );

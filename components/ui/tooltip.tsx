@@ -22,7 +22,7 @@ export const AnimatedTooltip = ({
   className = "-top-16 -left-1/2 translate-x-1/2",
 }: _ITooltip) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const { theme, setTheme, systemTheme } = useTheme();
+  const { setTheme, systemTheme } = useTheme();
   const springConfig = { stiffness: 100, damping: 5 };
   const x = useMotionValue(0); // going to set this value on mouse move
   // rotate the tooltip

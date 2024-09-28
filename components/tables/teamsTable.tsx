@@ -1,44 +1,31 @@
-"use client";
 import React from "react";
 import TableComponent from "./tableComponent"; // Import the reusable TableComponent
+import { mockFetchData } from "@/lib/dataFetching";
+import { teamsData } from "@/data/dummy.data";
+import { deleteEntity } from "@/lib/actions";
 
-const TeamsTable = () => {
-  const teamsData = [
-    {
-      _id: "1",
-      image: "/team1.jpg",
-      name: "Team Alpha",
-      projects: ["Project A", "Project B", "Project C"], // Array of strings
-      isActive: true,
-    },
-    {
-      _id: "2",
-      image: "/team2.jpg",
-      name: "Team Beta",
-      projects: ["Project D", "Project E"],
-      isActive: false,
-    },
-    // more teams...
-  ];
+const TeamsTable = async ({
+  query,
+  currentPage,
+  pageSize,
+}: _ISpecificTableProps) => {
+  const teams = await mockFetchData(teamsData, {
+    query,
+    currentPage,
+    pageSize,
+  });
 
-  const columns = ["image", "name", "projects", "isActive"]; // Specify columns to display
-
-  const handleBulkUpdate = (selectedIds: string[]) => {
-    console.log("Bulk update teams with IDs:", selectedIds);
-  };
-
-  const deleteAction = async (id: string) => {
-    // Implement delete action here
-    console.log("Delete team with ID:", id);
-  };
+  const columns = ["projects", "isActive"]; // Normal columns
+  const specialColumns: [string, string, string] = ["image", "name", "email"]; // Special columns
 
   return (
     <TableComponent
-      data={teamsData}
+      data={teams}
       columnData={columns}
       entityType="team"
-      deleteAction={deleteAction}
-      // onBulkUpdate={handleBulkUpdate}
+      deleteAction={deleteEntity}
+      specialColumns={specialColumns} // Special columns passed here
+      specialFieldHeader="Team Details" // Custom header for the special column
     />
   );
 };
