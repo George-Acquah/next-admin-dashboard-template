@@ -6,7 +6,7 @@ import FinanceChart from "@/components/charts/financeChart";
 import TeamBarChart from "@/components/charts/teamsChart";
 import { entityData } from "@/data/root.data";
 
-const Dashboard = ({ searchParams }: _ISearchQuery) => {
+const DashboardPage = ({ searchParams }: _ISearchQuery) => {
   const user = searchParams?.q || "";
   const currentPage = Number(searchParams?.page) || 1;
   const pageSize = Number(searchParams?.size) || 5;
@@ -16,7 +16,7 @@ const Dashboard = ({ searchParams }: _ISearchQuery) => {
     <div className="flex gap-4 flex-col md:flex-row">
       {/* Right */}
       <div className="w-full lg:w-2/3 flex flex-col gap-8">
-        {/* Dashboard Cards */}
+        {/* DashboardPage Cards */}
         <div className="flex gap-4 justify-between flex-wrap">
           {entityData.map((entity, idx) => (
             <InformationCards key={idx} entity={entity} />
@@ -46,4 +46,4 @@ const Dashboard = ({ searchParams }: _ISearchQuery) => {
   );
 };
 
-export default Dashboard;
+export default DashboardPage;
