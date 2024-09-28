@@ -36,4 +36,22 @@ export async function updateBulkEntity(ids: string[]): Promise<void> {
   }
 }
 
+export async function createUser(prevState: any, formData: FormData) {
+  console.log(prevState)
+  const email = formData.get("email");
+  const password = formData.get("password");
+
+  if (!email || !password) {
+    throw new Error("Email and Password are required");
+  }
+
+  // Add your logic to create a user in the database or another API call
+  // Example: await db.users.create({ email, password });
+
+  // Invalidate cache if needed after creation
+  revalidatePath("/");
+
+  return { message: "User created successfully!" };
+}
+
 

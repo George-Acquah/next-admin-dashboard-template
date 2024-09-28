@@ -7,65 +7,64 @@ const useDraw = (
   value: string
 ) => {
   const draw = useCallback(() => {
-    if (!inputRef.current) return;
+    if (!inputRef.current || !canvasRef.current) return;
+
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) return;
 
     canvas.width = 800;
     canvas.height = 800;
     ctx.clearRect(0, 0, 800, 800);
-    const computedStyles = getComputedStyle(inputRef.current);
 
+    // Get computed styles of the input element
+    const computedStyles = getComputedStyle(inputRef.current);
     const fontSize = parseFloat(computedStyles.getPropertyValue("font-size"));
+
+    // Set font and draw text
     ctx.font = `${fontSize * 2}px ${computedStyles.fontFamily}`;
     ctx.fillStyle = "#FFF";
     ctx.fillText(value, 16, 40);
 
+    // Only retrieve image data if necessary (using getImageData)
     const imageData = ctx.getImageData(0, 0, 800, 800);
     const pixelData = imageData.data;
     const newData: any[] = [];
 
-    for (let t = 0; t < 800; t++) {
-      const i = 4 * t * 800;
-      for (let n = 0; n < 800; n++) {
-        const e = i + 4 * n;
-        if (
-          pixelData[e] !== 0 &&
-          pixelData[e + 1] !== 0 &&
-          pixelData[e + 2] !== 0
-        ) {
+    // Optimize the loop for better performance
+    for (let y = 0; y < 800; y++) {
+      for (let x = 0; x < 800; x++) {
+        const index = (y * 800 + x) * 4;
+
+        // Check if pixel is not fully transparent (alpha channel)
+        if (pixelData[index + 3] !== 0) {
           newData.push({
-            x: n,
-            y: t,
-            color: [
-              pixelData[e],
-              pixelData[e + 1],
-              pixelData[e + 2],
-              pixelData[e + 3],
-            ],
+            x,
+            y,
+            color: `rgba(${pixelData[index]}, ${pixelData[index + 1]}, ${
+              pixelData[index + 2]
+            }, ${pixelData[index + 3] / 255})`,
           });
         }
       }
     }
 
+    // Update the ref with new pixel data
     newDataRef.current = newData.map(({ x, y, color }) => ({
       x,
       y,
-      r: 1,
-      color: `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`,
+      r: 1, // Optional: radius, can be adjusted
+      color,
     }));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [value, canvasRef, inputRef, newDataRef]);
 
   useEffect(() => {
     draw();
   }, [value, draw]);
 
   return {
-    draw
-  }
+    draw,
+  };
 };
 
 export default useDraw;

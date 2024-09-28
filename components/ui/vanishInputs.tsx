@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { cn } from "@/utils/classes.utils";
 import useDraw from "@/utils/hooks/useDraw";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useId, useRef, useState } from "react";
 
 interface _IVanishingInput {
@@ -20,6 +20,7 @@ export function PlaceholdersAndVanishInput({
 }: // onSubmit,
 _IVanishingInput) {
   const [currentPlaceholder, setCurrentPlaceholder] = useState(0);
+  console.log(currentPlaceholder);
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const startAnimation = () => {

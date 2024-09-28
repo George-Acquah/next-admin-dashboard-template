@@ -2,7 +2,7 @@ interface _ISidebarContextProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   animate: boolean;
-  // setAnimate: React.Dispatch<React.SetStateAction<boolean>>;
+  setAnimate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface _IModalContextProps {
@@ -25,6 +25,71 @@ interface _IEntityData {
   type: string;
 }
 
+interface _IDetail {
+  id: string;
+  placeholder?: string;
+
+  /**
+   * The value to be shown inside the input field.
+   *
+   * @type {string}
+   * @memberof Detail
+   */
+  value?: string;
+
+  /**
+   * The label to be displayed alongside the input field.
+   * This provides a description or name for the field.
+   *
+   * @type {string}
+   * @memberof Detail
+   */
+  label: string;
+  width?: string;
+  bg?: string;
+  input_type?: "select" | "radio" | "textarea";
+  /**
+   * Optional icon to be displayed within the input field.
+   * Can be used to visually represent the field's purpose.
+   *
+   * @type {any}
+   * @memberof Detail
+   */
+  icon?: string;
+
+  onChange?: any;
+
+  /**
+   * Optional options to be rendered for select input field.
+   *
+   * @type {any}
+   * @memberof Detail
+   */
+  options?: string[];
+
+  /**
+   * Optional radios to be rendered for radio input field.
+   *
+   * @type {any}
+   * @memberof Detail
+   */
+  radio?: _IRadio[];
+
+  /**
+   * The type of the input field (e.g., "text", "password").
+   * Defines the kind of data the input field expects.
+   *
+   * @type {string}
+   * @memberof Detail
+   */
+  type: string;
+  disabled?: boolean;
+  mt?: boolean;
+  tooltip?: boolean;
+  group?: string; //
+  errors?: Record<string, string[] | undefined> | null;
+}
+
 interface _IPostApiResponse {
   statusCode: number;
   message: string;
@@ -43,6 +108,16 @@ interface _ITableHeaderRowContents {
 interface _IVerificationBtn {
   id: string;
   status: boolean;
+}
+
+interface _ICommonFieldProps {
+  name: string;
+  label: string;
+  type: _TFieldType;
+  placeholder?: string;
+  disabled?: boolean;
+  description?: string;
+  renderAfter?: ReactNode;
 }
 
 interface _IActionBtn {
@@ -128,6 +203,8 @@ type _TSizes =
   | "lg"
   | "sm"
   | "icon";
+type _TFieldType = "text" | "email" | "password" | "number";
 
   type _TRefDivElement = React.HTMLAttributes<HTMLDivElement>;
-  type _TRefPElement = React.HTMLAttributes<HTMLParagraphElement>;
+type _TRefPElement = React.HTMLAttributes<HTMLParagraphElement>;
+  

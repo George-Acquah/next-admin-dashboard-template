@@ -6,6 +6,7 @@ interface State {
   sidenavType: string;
   sidenavColor: string;
   transparentNavbar: boolean;
+  animateSidenav: boolean;
   fixedNavbar: boolean;
   openConfigurator: boolean;
 }
@@ -14,6 +15,7 @@ interface State {
 type Action =
   | { type: "OPEN_SIDENAV"; value: boolean }
   | { type: "SIDENAV_TYPE"; value: string }
+  | { type: "ANIMATE_SIDENAV"; value: boolean }
   | { type: "SIDENAV_COLOR"; value: string }
   | { type: "TRANSPARENT_NAVBAR"; value: boolean }
   | { type: "FIXED_NAVBAR"; value: boolean }
@@ -25,6 +27,7 @@ const initialState: State = {
   sidenavColor: "dark",
   sidenavType: "white",
   transparentNavbar: true,
+  animateSidenav: true,
   fixedNavbar: false,
   openConfigurator: false,
 };
@@ -38,6 +41,8 @@ function reducer(state: State, action: Action): State {
       return { ...state, sidenavType: action.value };
     case "SIDENAV_COLOR":
       return { ...state, sidenavColor: action.value };
+    case "ANIMATE_SIDENAV":
+      return { ...state, animateSidenav: action.value };
     case "TRANSPARENT_NAVBAR":
       return { ...state, transparentNavbar: action.value };
     case "FIXED_NAVBAR":
@@ -88,6 +93,11 @@ export const setOpenSidenav = (
   dispatch: React.Dispatch<Action>,
   value: boolean
 ) => dispatch({ type: "OPEN_SIDENAV", value });
+
+export const setAnimateSidenav = (
+  dispatch: React.Dispatch<Action>,
+  value: boolean
+) => dispatch({ type: "ANIMATE_SIDENAV", value });
 
 export const setSidenavType = (
   dispatch: React.Dispatch<Action>,

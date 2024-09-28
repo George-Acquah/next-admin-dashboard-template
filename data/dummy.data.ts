@@ -64,3 +64,62 @@ export const projectsData: _IDummyProjects[] = [
     isActive: false,
   },
 ];
+
+export const teamsData = [
+  {
+    _id: "1",
+    image: "/avatar.png",
+    name: "Team Alpha",
+    email: "alpha@example.com",
+    projects: ["Project A", "Project B"],
+    isActive: true,
+  },
+  {
+    _id: "2",
+    image: "/avatar.png",
+    name: "Team Beta",
+    email: "beta@example.com",
+    projects: ["Project C"],
+    isActive: false,
+  },
+  {
+    _id: "3",
+    image: "/avatar.png",
+    name: "Team Beta",
+    email: "beta@example.com",
+    projects: ["Project C"],
+    isActive: false,
+  },
+  {
+    _id: "4",
+    image: "/avatar.png",
+    name: "Team Beta",
+    email: "beta@example.com",
+    projects: ["Project C"],
+    isActive: false,
+  },
+  {
+    _id: "5",
+    image: "/avatar.png",
+    name: "Team Beta",
+    email: "beta@example.com",
+    projects: ["Project C"],
+    isActive: false,
+  },
+  {
+    _id: "6",
+    image: "/avatar.png",
+    name: "Team Beta",
+    email: "beta@example.com",
+    projects: ["Project C"],
+    isActive: true,
+  },
+  {
+    _id: "7",
+    image: "/avatar.png",
+    name: "Team Beta",
+    email: "beta@example.com",
+    projects: ["Project C"],
+    isActive: false,
+  },
+];

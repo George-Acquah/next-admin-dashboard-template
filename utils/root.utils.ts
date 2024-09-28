@@ -28,3 +28,43 @@ export const calculatePercentage = (total: number, item: number) => {
   const percentage = (item / total) * 100;
   return percentage.toFixed(0); // Return the percentage as a whole number
 };
+
+export const generatePagination = (currentPage: number, totalPages: number) => {
+  if (totalPages <= 7) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  if (currentPage <= 3) {
+    return [1, 2, 3, "...", totalPages - 1, totalPages];
+  }
+
+  if (currentPage >= totalPages - 2) {
+    return [1, 2, "...", totalPages - 2, totalPages - 1, totalPages];
+  }
+
+  return [
+    1,
+    "...",
+    currentPage - 1,
+    currentPage,
+    currentPage + 1,
+    "...",
+    totalPages,
+  ];
+};
+
+export const getStringValue = (
+  value: string | number | boolean | string[] | undefined
+): string => {
+  if (typeof value === "string") {
+    return value;
+  }
+  if (typeof value === "number") {
+    return value.toString();
+  }
+  if (typeof value === "boolean") {
+    return value ? "True" : "False"; // Or any alternate string representation
+  }
+  // Handle string array or undefined
+  return "";
+};
