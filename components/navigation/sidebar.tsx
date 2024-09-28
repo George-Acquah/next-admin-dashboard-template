@@ -2,11 +2,11 @@
 
 import { motion } from "framer-motion";
 import { DesktopSidebar, MobileSidebar } from "./sidebarTypes";
-import { useSidebar } from "@/utils/contexts/sidebar.context";
 import { Logo, LogoIcon } from "../ui/logo";
 import { sidebarLinks } from "@/data/sidebar.data";
 import { SidebarLink } from "./sidebarLinks";
 import Image from "next/image";
+import { useConfigurator } from "@/utils/contexts/configurator.context";
 
 export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
   return (
@@ -18,11 +18,11 @@ export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
 };
 
 const Sidebar = () => {
-  const { open } = useSidebar();
+  const { state: { openSidenav } } = useConfigurator();
   return (
     <SidebarBody className="justify-between gap-10">
       <div className="flex flex-col overflow-x-hidden">
-        {open ? <Logo /> : <LogoIcon />}
+        {openSidenav ? <Logo /> : <LogoIcon />}
         <div className="mt-8 flex flex-col gap-2">
           {sidebarLinks.map((link, idx) => (
             <SidebarLink key={idx} link={link} />

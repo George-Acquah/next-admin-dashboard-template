@@ -1,14 +1,14 @@
 import { cn } from "@/utils/classes.utils";
-import { useSidebar } from "@/utils/contexts/sidebar.context";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'; // for the outline version
+import { setOpenSidenav, useConfigurator } from "@/utils/contexts/configurator.context";
 
 export const MobileSidebar = ({
   className,
   children,
   ...props
 }: React.ComponentProps<"div">) => {
-  const { open, setOpen } = useSidebar();
+  const { dispatch, state: { openSidenav }} = useConfigurator();
   return (
     <>
       <div
@@ -20,11 +20,11 @@ export const MobileSidebar = ({
         <div className="flex justify-end z-20 w-full">
           <Bars3Icon
             className="text-neutral-800 dark:text-neutral-200 w-4 h-4"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpenSidenav(dispatch, !openSidenav)}
           />
         </div>
         <AnimatePresence>
-          {open && (
+          {openSidenav && (
             <motion.div
               initial={{ x: "-100%", opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
@@ -38,12 +38,10 @@ export const MobileSidebar = ({
                 className
               )}
             >
-              <div
-                className="absolute right-10 top-10 z-50"
-              >
+              <div className="absolute right-10 top-10 z-50">
                 <XMarkIcon
                   className="text-neutral-800 dark:text-neutral-200 w-4 h-4"
-                  onClick={() => setOpen(!open)}
+                  onClick={() => setOpenSidenav(dispatch, !openSidenav)}
                 />
               </div>
               {children}
@@ -60,7 +58,10 @@ export const DesktopSidebar = ({
   children,
   ...props
 }: React.ComponentProps<typeof motion.div>) => {
-  const { open, setOpen, animate } = useSidebar();
+  const {
+    dispatch,
+    state: { openSidenav, animateSidenav },
+  } = useConfigurator();
   return (
     <>
       <motion.div
@@ -69,10 +70,12 @@ export const DesktopSidebar = ({
           className
         )}
         animate={{
-          width: animate ? (open ? "300px" : "60px") : "60px",
+          width: openSidenav
+              ? "250px"
+              : "60px"
         }}
-        onMouseEnter={() => setOpen(true)}
-        onMouseLeave={() => setOpen(false)}
+        onMouseEnter={animateSidenav ? () => setOpenSidenav(dispatch, true): undefined}
+        onMouseLeave={animateSidenav ? () => setOpenSidenav(dispatch, false) : undefined}
         {...props}
       >
         {children}

@@ -1,5 +1,5 @@
 import { cn } from "@/utils/classes.utils";
-import { useSidebar } from "@/utils/contexts/sidebar.context";
+import { useConfigurator } from "@/utils/contexts/configurator.context";
 import { motion } from "framer-motion";
 import Link, { LinkProps } from "next/link";
 
@@ -12,7 +12,7 @@ export const SidebarLink = ({
   className?: string;
   props?: LinkProps;
 }) => {
-  const { open, animate } = useSidebar();
+  const { state: { openSidenav }} = useConfigurator();
   return (
     <Link
       href={link.href}
@@ -27,8 +27,10 @@ export const SidebarLink = ({
 
       <motion.span
         animate={{
-          display: animate ? (open ? "inline-block" : "none") : "none",
-          opacity: animate ? (open ? 1 : 0) : 1,
+          display: openSidenav
+              ? "inline-block"
+              : "none",
+          opacity: openSidenav ? 1 : 0
         }}
         className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
       >

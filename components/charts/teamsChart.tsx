@@ -10,7 +10,6 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
-import { Typography } from "../ui/typography";
 import { Chart, ChartContent, ChartHeader } from "../ui/chart";
 import { useTheme } from "next-themes";
 
