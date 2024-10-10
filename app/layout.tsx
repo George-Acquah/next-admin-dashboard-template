@@ -5,7 +5,6 @@ import Providers from "./providers";
 import { ReactNode } from "react";
 import ConfigurationButton from "./configurationButton";
 import dynamic from "next/dynamic";
-// import Configurator from "@/components/configurator";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,7 +26,7 @@ export const metadata: Metadata = {
 };
 
 const Configurator = dynamic(() => import("@/components/configurator"), {
-  loading: () => <></>
+  loading: () => <p>loading ...</p>
 });
 
 type _TRootLayoutProps = {

@@ -63,7 +63,7 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      <div ref={ref} className={cn("space-y-1", className)} {...props} />
     </FormItemContext.Provider>
   );
 });
@@ -73,7 +73,7 @@ FormItem.displayName = "FormItem";
 const FormField: React.FC<FormFieldProps> = ({
   name,
   rules,
-  defaultValue,
+  defaultValue= '',
   render,
   ...controllerProps
 }) => {

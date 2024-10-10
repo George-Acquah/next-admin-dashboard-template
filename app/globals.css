@@ -16,6 +16,23 @@
   background: #f1f1f1;
 }
 
+/* Hide only horizontal scrollbar */
+.hide-horizontal-scrollbar::-webkit-scrollbar {
+  height: 0; /* Hide horizontal scrollbar in Webkit browsers */
+  width: 0;
+}
+
+.hide-horizontal-scrollbar {
+  overflow-x: auto; /* Allow horizontal scrolling */
+  overflow-y: auto; /* Keep vertical scrollbar */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-horizontal-scrollbar::-webkit-scrollbar-thumb {
+  display: none; /* No horizontal scrollbar thumb */
+}
+
 .react-calendar {
   width: 100% !important;
   border: none !important;

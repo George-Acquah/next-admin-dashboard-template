@@ -8,10 +8,24 @@ import React, {
 const ModalContext = createContext<_IModalContextProps | undefined>(undefined);
 
 const ModalProvider = ({ children }: { children: ReactNode }) => {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
+
+    const [modalState, setModalState] = useState<{ [key: string]: boolean }>(
+      {}
+    );
+
+    const setOpen = (key: string, open: boolean) => {
+      setModalState((prevState) => ({
+        ...prevState,
+        [key]: open,
+      }));
+    };
+
+    const isOpen = (key: string) => modalState[key] || false;
+
 
   return (
-    <ModalContext.Provider value={{ open, setOpen }}>
+    <ModalContext.Provider value={{ isOpen, setOpen }}>
       {children}
     </ModalContext.Provider>
   );

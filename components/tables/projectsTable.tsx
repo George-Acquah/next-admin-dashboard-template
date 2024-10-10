@@ -1,5 +1,5 @@
 import React from "react";
-import TableComponent from "./tableComponent"; // Import the reusable TableComponent
+import TableComponent from "./tableComponent";
 import { projectsData } from "@/data/dummy.data";
 import { mockFetchData } from "@/lib/dataFetching";
 import { deleteEntity } from "@/lib/actions";
@@ -14,7 +14,6 @@ const ProjectsTable = async ({query, currentPage, pageSize}: _ISpecificTableProp
       columnData={columns}
       entityType="project"
       deleteAction={deleteEntity}
-      // onBulkUpdate={updateBulkEntity}
     />
   );
 };

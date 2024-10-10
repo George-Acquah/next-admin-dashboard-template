@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useState, forwardRef, ReactNode, useRef } from "react";
-import {
-  CheckIcon,
-  ChevronRightIcon,
-} from "@heroicons/react/24/solid"; // Heroicons for icons
-import { motion, AnimatePresence } from "framer-motion"; // Framer motion for animations
+import { CheckIcon, ChevronRightIcon } from "@heroicons/react/24/solid"; // Heroicons for icons
 import { cn } from "@/utils/classes.utils"; // Utility for conditional classnames
 import { _TButtonVariants, Button } from "./button";
 import { useOutsideClick } from "@/utils/hooks/useOutsideClick";
@@ -13,25 +9,25 @@ import { useOutsideClick } from "@/utils/hooks/useOutsideClick";
 // Types for the component props
 interface DropdownMenuProps {
   trigger: ReactNode;
-  children: (onClose: () => void) => ReactNode; // Pass onClose to children;
+  children: (onClose: () => void) => ReactNode;
   className?: string;
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
 }
 
 interface DropdownItemProps {
   className?: string;
   inset?: boolean;
   children: ReactNode;
-  onClick?: () => void; // Add the onClick prop here
+  onClick?: () => void;
 }
 
 interface _IDropdownSubMenuProps extends DropdownItemProps {
   trigger: ReactNode;
   position: "left" | "right";
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
 }
 
-interface _IDropDownTriggerProps extends DropdownItemProps{
+interface _IDropDownTriggerProps extends DropdownItemProps {
   variant: _TButtonVariants;
   size: _TSizes;
 }
@@ -51,40 +47,42 @@ interface DropdownMenuSubContentProps {
   className?: string;
   children: ReactNode;
   position: "left" | "right";
-  style: React.CSSProperties;
+  style?: React.CSSProperties;
 }
 
-// Base Dropdown Menu component with animations
-export const DropdownMenu: React.FC<DropdownMenuProps> = ({ trigger, style = {}, children, className} ) => {
+// Base Dropdown Menu component with Tailwind animations
+export const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  trigger,
+  style = {},
+  children,
+  className,
+}) => {
   const [open, setOpen] = useState(false);
   const closeMenu = () => setOpen(false);
   const dropdownMenuRef = useRef<HTMLDivElement>(null);
 
   // Use the custom hook to detect clicks outside the dropdown menu
   useOutsideClick(dropdownMenuRef, closeMenu);
+
   return (
     <div ref={dropdownMenuRef} className="relative inline-block text-left">
       <div onClick={() => setOpen((prev) => !prev)}>{trigger}</div>
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            className={cn(
-              "absolute z-50 mt-2 shadow-lg ring-opacity-5",
-              className
-            )}
-            style={style}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-          >
-            {children(closeMenu)}
-          </motion.div>
-        )}
-      </AnimatePresence>
+
+      {open && (
+        <div
+          className={cn(
+            "absolute z-50 mt-2 shadow-lg ring-opacity-5 bg-white rounded-lg transform transition-all duration-200 ease-in-out",
+            open ? "opacity-100 scale-100" : "opacity-0 scale-95",
+            className
+          )}
+          style={style}
+        >
+          {children(closeMenu)}
+        </div>
+      )}
     </div>
   );
-}
+};
 
 // Dropdown Menu Trigger component
 export const DropdownMenuTrigger = forwardRef<
@@ -103,7 +101,7 @@ export const DropdownMenuTrigger = forwardRef<
 ));
 DropdownMenuTrigger.displayName = "DropdownMenuTrigger";
 
-// Dropdown Menu Content component with framer-motion
+// Dropdown Menu Content component
 export const DropdownMenuContent: React.FC<{
   className?: string;
   children: ReactNode;
@@ -111,15 +109,13 @@ export const DropdownMenuContent: React.FC<{
   <div className={cn("py-1", className)}>{children}</div>
 );
 
-// Dropdown Menu Item component with hover animations
+// Dropdown Menu Item component with Tailwind hover and tap animations
 export const DropdownMenuItem = forwardRef<HTMLDivElement, DropdownItemProps>(
   ({ className, inset, children, ...props }, ref) => (
-    <motion.div
+    <div
       ref={ref}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
       className={cn(
-        "flex cursor-pointer items-center rounded-md px-4 py-2 text-sm hover:bg-gray-100",
+        "flex cursor-pointer items-center rounded-md px-4 py-2 text-sm transition-transform duration-150 hover:bg-gray-100 active:scale-95",
         inset && "pl-8",
         className
       )}
@@ -127,7 +123,7 @@ export const DropdownMenuItem = forwardRef<HTMLDivElement, DropdownItemProps>(
       {...props}
     >
       {children}
-    </motion.div>
+    </div>
   )
 );
 DropdownMenuItem.displayName = "DropdownMenuItem";
@@ -137,28 +133,25 @@ export const DropdownMenuCheckboxItem = forwardRef<
   HTMLDivElement,
   DropdownCheckboxItemProps
 >(({ className, children, checkboxClassName, checked, ...props }, ref) => (
-  <motion.div
+  <div
     ref={ref}
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
     className={cn(
-      "relative flex cursor-pointer items-center rounded-md px-4 py-2 text-sm hover:bg-gray-100",
+      "relative flex cursor-pointer items-center rounded-md px-4 py-2 text-sm hover:bg-gray-100 transition-transform duration-150 active:scale-95",
       className
     )}
     {...props}
   >
     <span
       className={cn(
-        `absolute rounded-sm border flex h-3.5 w-3.5 items-center justify-center`,
+        "absolute rounded-sm border flex h-3.5 w-3.5 items-center justify-center",
         checkboxClassName
       )}
     >
       {checked && <CheckIcon className={cn("h-4 w-4")} />}
     </span>
     {children}
-  </motion.div>
+  </div>
 ));
-
 DropdownMenuCheckboxItem.displayName = "DropdownMenuCheckboxItem";
 
 // Dropdown Menu Radio Item
@@ -166,82 +159,80 @@ export const DropdownMenuRadioItem = forwardRef<
   HTMLDivElement,
   DropdownRadioItemProps
 >(({ className, radioClassName, children, ...props }, ref) => (
-  <motion.div
+  <div
     ref={ref}
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
     className={cn(
-      "relative flex cursor-pointer items-center rounded-md px-4 py-2 text-sm hover:bg-gray-100",
+      "relative flex cursor-pointer items-center rounded-md px-4 py-2 text-sm hover:bg-gray-100 transition-transform duration-150 active:scale-95",
       className
     )}
     {...props}
   >
     <span
       className={cn(
-        `absolute border border-neutral-500 rounded-full flex h-3.5 w-3.5 items-center justify-center`
+        "absolute border border-neutral-500 rounded-full flex h-3.5 w-3.5 items-center justify-center"
       )}
     >
       <div className={cn("rounded-full", radioClassName)} />
     </span>
     {children}
-  </motion.div>
+  </div>
 ));
-
 DropdownMenuRadioItem.displayName = "DropdownMenuRadioItem";
 
-// Dropdown Menu Sub Trigger with animations
+// Dropdown Menu Sub Trigger
 export const DropdownMenuSubTrigger = forwardRef<
   HTMLDivElement,
   _IDropdownSubMenuProps
->(({ className, trigger, position, style = {}, inset, children, ...props }, ref) => {
-  const [open, setOpen] = useState(false);
+>(
+  (
+    { className, trigger, position, style = {}, inset, children, ...props },
+    ref
+  ) => {
+    const [open, setOpen] = useState(false);
 
-  return (
-    <motion.div
-      ref={ref}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className={cn(
-        "relative flex cursor-pointer items-center rounded-md px-4 py-2 text-sm hover:bg-gray-100",
-        inset && "pl-8",
-        className
-      )}
-      onMouseEnter={() => setOpen(true)} // Open on mouse enter
-        onMouseLeave={() => setOpen(false)} // Close on mouse leave
-      {...props}
-    >
-      {trigger}
-      <ChevronRightIcon className="ml-auto h-4 w-4" />
-      <AnimatePresence>
-        {open && <DropdownMenuSubContent position={position} style={style}>{children}</DropdownMenuSubContent>}
-      </AnimatePresence>
-    </motion.div>
-  );
-});
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "relative flex cursor-pointer items-center rounded-md px-4 py-2 text-sm hover:bg-gray-100 transition-transform duration-150 active:scale-95",
+          inset && "pl-8",
+          className
+        )}
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+        {...props}
+      >
+        {trigger}
+        <ChevronRightIcon className="ml-auto h-4 w-4" />
+        {open && (
+          <DropdownMenuSubContent position={position} style={style}>
+            {children}
+          </DropdownMenuSubContent>
+        )}
+      </div>
+    );
+  }
+);
 DropdownMenuSubTrigger.displayName = "DropdownMenuSubTrigger";
 
-// Dropdown Menu Sub Content with motion
+// Dropdown Menu Sub Content
 export const DropdownMenuSubContent: React.FC<DropdownMenuSubContentProps> = ({
   style,
   position,
   className,
   children,
 }) => (
-  <motion.div
+  <div
     className={cn(
-      "absolute top-0 w-48 mt-0 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5",
+      "absolute top-0 w-48 mt-0 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 transition-all duration-200",
+      position === "right" ? "left-full" : "right-full",
       className
     )}
-    initial={{ opacity: 0, x: position === "left" ? 10 : -10 }}
-    animate={{ opacity: 1, x: 0 }}
-    exit={{ opacity: 0, x: position === "left" ? 10 : -10 }}
-    transition={{ duration: 0.2 }}
     style={style}
   >
     {children}
-  </motion.div>
+  </div>
 );
-
 
 // Dropdown Menu Separator
 export const DropdownMenuSeparator: React.FC = () => (

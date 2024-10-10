@@ -1,10 +1,8 @@
 "use client";
-// import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import { SEARCH_PARAMS } from "@/utils/constants/search.constants";
-// import { SvgSpinner } from "./ui/icons";
 import { PlaceholdersAndVanishInput } from "./ui/vanishInputs";
 
 interface IProps<T> {
@@ -21,7 +19,7 @@ export default function Search<T extends SearchParamKeys>({
   disabled,
   placeholders = [
     "Search for entity 1",
-    "Search for entity 2",
+    "Another Search for entity 2",
     "Search for entity 3",
   ],
 }: IProps<T>) {
@@ -54,14 +52,6 @@ export default function Search<T extends SearchParamKeys>({
         isPending={isPending}
         disabled={disabled}
       />
-      {/* <MagnifyingGlassIcon
-        className={`absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 peer-focus:text-black text-black-200/70`}
-      />
-      {isPending && (
-        <div className="absolute right-0 top-0 bottom-0 flex items-center justify-center">
-          <SvgSpinner className="dark:text-gray-400" />
-        </div>
-      )} */}
     </div>
   );
 }

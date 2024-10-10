@@ -7,23 +7,33 @@ import {
   TableCell,
   TableBody,
   TableImageCell,
+  TableHeader,
+  TableCheckbox,
 } from "@/components/ui/table"; // Import custom encapsulated components
 import { usePathname } from "next/navigation";
 import { DeleteBtn, EditBtn } from "./buttons";
 import StatusBadge from "./status";
 import NoContent from "../ui/noContent";
 import { Typography } from "../ui/typography";
-import { getStringValue } from "@/utils/root.utils";
+import { getStringValue, getTableBooleanFields } from "@/utils/root.utils";
 import { cn } from "@/utils/classes.utils";
-// This ensures that we pass at least 2 and at most 3 special fields, with `name` being mandatory.
+import {
+  AdjustmentsHorizontalIcon,
+  ChevronUpDownIcon,
+} from "@heroicons/react/24/outline";
+import FormModal from "./tableModal";
+import { ProjectsFormInputSchema, TeamsSchema } from "@/schemas";
+import { ZodSchema } from "zod";
 type SpecialFieldProps = {
   specialColumns: [string, string] | [string, string, string]; // Allow 2 or 3 fields
   specialFieldHeader: string; // Header for the special fields
 };
 
-// Helper function to identify boolean fields
-const getBooleanFields = (item: _TableRowType) => {
-  return Object.keys(item).filter((key) => typeof item[key] === "boolean");
+// Define schema mapping
+const schemaMap: { [key: string]: ZodSchema<any> } = {
+  team: TeamsSchema,
+  project: ProjectsFormInputSchema,
+  // Add other schemas here as needed
 };
 
 // Reusable component for rendering the image cell
@@ -46,34 +56,10 @@ const TableImage = React.memo(
 );
 TableImage.displayName = "TableImage";
 
-// Checkbox component for individual rows
-const TableCheckbox = React.memo(
-  ({
-    checked,
-    id,
-    onChange,
-  }: {
-    checked: boolean;
-    id: string;
-    onChange: () => void;
-  }) => (
-    <input
-      type="checkbox"
-      aria-label={id}
-      id={id}
-      className="form-checkbox h-4 w-4"
-      checked={checked}
-      onChange={onChange}
-    />
-  )
-);
-TableCheckbox.displayName = "TableCheckbox";
-
 // Specialized rendering for when exactly 2 or 3 special fields are passed
 const renderSpecialFields = (item: _TableRowType, specialColumns: string[]) => {
   return (
     <>
-      {/* If image is provided, render the image */}
       {specialColumns.includes("image") && item.image && (
         <TableImage
           src={item.image ?? ""}
@@ -81,7 +67,6 @@ const renderSpecialFields = (item: _TableRowType, specialColumns: string[]) => {
         />
       )}
 
-      {/* Render the other two fields in a flex-col */}
       <div className="flex flex-col">
         {specialColumns
           .filter((col) => col !== "image")
@@ -89,7 +74,11 @@ const renderSpecialFields = (item: _TableRowType, specialColumns: string[]) => {
             <Typography
               key={index}
               variant="span"
-              className={`${index === 0 ? "font-semibold text-base" : "text-sm dark:text-neutral-300"}`} // Apply "font-semibold" for the first field
+              className={`${
+                index === 0
+                  ? "font-semibold text-base"
+                  : "text-sm dark:text-neutral-300"
+              }`}
             >
               {item[field] ?? `Unknown ${field}`}
             </Typography>
@@ -130,7 +119,7 @@ const renderCell = (column: string, item: _TableRowType) => {
 const TableButtonHelper = React.memo(
   ({
     id,
-    entityType,
+    // entityType,
     deleteAction,
   }: {
     id: string;
@@ -141,11 +130,9 @@ const TableButtonHelper = React.memo(
     ) => Promise<_IApiResponse<void> | undefined | void>;
   }) => {
     const pathname = usePathname();
-    console.log(entityType);
-
     return (
       <div className="flex items-center gap-2">
-        <EditBtn href={`${pathname}/${id}/update`} />
+        <EditBtn href={`${pathname}/${id}`} />
         {deleteAction && (
           <DeleteBtn id={id} label={"Delete"} action={deleteAction} />
         )}
@@ -206,99 +193,130 @@ const TableComponent = ({
     }
   };
 
-  const resolvedClassName = (extraClass?: string) => cn(
-    `px-6 ${
-      renderSpecialFieldsHeader &&
-      specialColumns &&
-      specialColumns.includes("image")
-        ? "py-2"
-        : " py-4"
-    }`
-  , extraClass);
+  const resolvedClassName = (extraClass?: string) =>
+    cn(
+      `px-6 ${
+        renderSpecialFieldsHeader &&
+        specialColumns &&
+        specialColumns.includes("image")
+          ? "py-2"
+          : " py-4"
+      }`,
+      extraClass
+    );
+
+  // Retrieve the appropriate schema based on entityType
+  const formSchema = schemaMap[entityType];
 
   return (
-    <Table className="mt-8">
-      <TableHead>
-        <TableRow isHeader>
-          <TableCell isHeader className="px-6">
-            <input
-              type="checkbox"
-              id="check-all"
-              aria-label="check-all"
-              className="form-checkbox h-4 w-4"
-              checked={selectedRows.size === data.length}
-              onChange={toggleSelectAll}
-            />
-          </TableCell>
-
-          {/* Conditionally render header for special fields */}
-          {renderSpecialFieldsHeader && (
-            <TableCell isHeader className="px-6 flex items-center gap-4">
-              {specialFieldHeader}
-            </TableCell>
-          )}
-
-          {columnData.map((column, index) => (
-            <TableCell key={`header-${index}`} isHeader className="px-6">
-              {column}
-            </TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {data.map((item) => {
-          const booleanFields = getBooleanFields(item); // Identify boolean fields
-          const isSelected = selectedRows.has(item._id);
-
-          return (
-            <TableRow
-              key={`row-${item._id}`}
-              className="px-6 align-middle border-none text-xs whitespace-nowrap"
-            >
-              <TableCell className={resolvedClassName()}>
-                <TableCheckbox
-                  checked={isSelected}
-                  id={item._id}
-                  onChange={() => toggleRowSelection(item._id)}
+    <>
+      <TableHeader className="flex items-center justify-between mt-8 ">
+        <Typography
+          variant="h3"
+          className="capitalize"
+        >{`${entityType}s Table`}</Typography>
+        <div className="flex items-center gap-2 self-end">
+          <button className="w-8 h-8 flex items-center justify-center rounded-full text-primary-foreground bg-neutral-400 dark:bg-zinc-500">
+            <AdjustmentsHorizontalIcon className="w-6 h-6" />
+          </button>
+          <button className="w-8 h-8 flex items-center justify-center rounded-full text-primary-foreground bg-neutral-400 dark:bg-zinc-500">
+            <ChevronUpDownIcon className="w-6 h-6" />
+          </button>
+          {/* <FormModal table="teacher" type="create" /> */}
+          <FormModal
+            entityType={entityType}
+            type={"create"}
+            data={undefined}
+            id={undefined}
+            schema={formSchema}
+          />
+        </div>
+      </TableHeader>
+      <div className="w-full overflow-x-auto hide-horizontal-scrollbar">
+        <Table className="mt-8">
+          <TableHead>
+            <TableRow isHeader>
+              <TableCell isHeader className="px-6">
+                <input
+                  type="checkbox"
+                  id="check-all"
+                  aria-label="check-all"
+                  className="form-checkbox h-4 w-4"
+                  checked={selectedRows.size === data.length}
+                  onChange={toggleSelectAll}
                 />
               </TableCell>
 
-              {/* Render specialized fields if criteria are met */}
+              {/* Conditionally render header for special fields */}
               {renderSpecialFieldsHeader && (
-                <TableCell
-                  className={resolvedClassName("flex items-center gap-4")}
-                >
-                  {renderSpecialFields(item, specialColumns)}
+                <TableCell isHeader className="px-6 flex items-center gap-4">
+                  {specialFieldHeader}
                 </TableCell>
               )}
 
-              {columnData.map((column, columnIndex) => (
-                <TableCell
-                  key={`cell-${columnIndex}`}
-                  className={resolvedClassName()}
-                >
-                  {booleanFields.includes(column) ? (
-                    <StatusBadge status={item[column] as boolean} />
-                  ) : (
-                    renderCell(column, item)
-                  )}
+              {columnData.map((column, index) => (
+                <TableCell key={`header-${index}`} isHeader className="px-6">
+                  {column}
                 </TableCell>
               ))}
-
-              <TableCell className={resolvedClassName()}>
-                {item["role"] !== "admin" && (
-                  <TableButtonHelper
-                    id={item._id}
-                    entityType={entityType}
-                    deleteAction={deleteAction}
-                  />
-                )}
-              </TableCell>
             </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+          </TableHead>
+          <TableBody>
+            {data.map((item) => {
+              const booleanFields = getTableBooleanFields(item); // Identify boolean fields
+              const isSelected = selectedRows.has(item._id);
+
+              return (
+                <TableRow
+                  key={`row-${item._id}`}
+                  className="px-6 align-middle border-none text-xs whitespace-nowrap"
+                >
+                  <TableCell className={resolvedClassName()}>
+                    <TableCheckbox
+                      checked={isSelected}
+                      id={item._id}
+                      onChange={() => toggleRowSelection(item._id)}
+                    />
+                  </TableCell>
+
+                  {/* Render specialized fields if criteria are met */}
+                  {renderSpecialFieldsHeader && (
+                    <TableCell
+                      className={resolvedClassName("flex items-center gap-4")}
+                    >
+                      {renderSpecialFields(item, specialColumns)}
+                    </TableCell>
+                  )}
+
+                  {columnData.map((column, columnIndex) => (
+                    <TableCell
+                      key={`cell-${columnIndex}`}
+                      className={resolvedClassName()}
+                    >
+                      {booleanFields.includes(column) ? (
+                        <StatusBadge status={item[column] as boolean} />
+                      ) : (
+                        renderCell(column, item)
+                      )}
+                    </TableCell>
+                  ))}
+
+                  <TableCell className={resolvedClassName("flex justify-end items-center")}>
+                    {item["role"] !== "admin" && (
+                      <TableButtonHelper
+                        id={item._id}
+                        entityType={entityType}
+                        deleteAction={deleteAction}
+                      />
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
+    </>
   );
 };
 

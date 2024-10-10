@@ -24,17 +24,12 @@ export default async function TeamsPage({ searchParams }: _ISearchQuery) {
 console.log(rowsToRender);
 
   return (
-    <div>
+    <div className="w-full max-w-full overflow-hidden">
       {/* Show skeleton while data is being fetched */}
       <Suspense
         key={teams + currentPage}
-        fallback={
-          <SkeletonTable
-            rowsToRender={7}
-          />
-        } // Handle last page
+        fallback={<SkeletonTable rowsToRender={7} />}
       >
-        {/* Fetch and display the actual data */}
         <TeamsTable
           query={teams}
           currentPage={currentPage}
@@ -42,9 +37,9 @@ console.log(rowsToRender);
         />
       </Suspense>
 
-      {/* Pagination based on the total number of pages */}
-      <div className="mt-5 w-full">
-        <Pagination totalPages={totalPages}/>
+      <div className="w-full max-w-full overflow-hidden">
+        {/* Prevent overflow */}
+        <Pagination totalPages={totalPages} />
       </div>
     </div>
   );

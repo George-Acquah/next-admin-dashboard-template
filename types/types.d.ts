@@ -5,9 +5,15 @@ interface _ISidebarContextProps {
   setAnimate: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface _IPageId {
+  params: {
+    id: string;
+ }
+}
+
 interface _IModalContextProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
+  isOpen: (key: string) => boolean;
+  setOpen: (key: string, open: boolean) => void;
 }
 
 interface _ISidebarProviderProps extends Partial<_ISidebarContextProps>{
@@ -23,71 +29,6 @@ interface _ILinks {
 interface _IEntityData {
   count: number;
   type: string;
-}
-
-interface _IDetail {
-  id: string;
-  placeholder?: string;
-
-  /**
-   * The value to be shown inside the input field.
-   *
-   * @type {string}
-   * @memberof Detail
-   */
-  value?: string;
-
-  /**
-   * The label to be displayed alongside the input field.
-   * This provides a description or name for the field.
-   *
-   * @type {string}
-   * @memberof Detail
-   */
-  label: string;
-  width?: string;
-  bg?: string;
-  input_type?: "select" | "radio" | "textarea";
-  /**
-   * Optional icon to be displayed within the input field.
-   * Can be used to visually represent the field's purpose.
-   *
-   * @type {any}
-   * @memberof Detail
-   */
-  icon?: string;
-
-  onChange?: any;
-
-  /**
-   * Optional options to be rendered for select input field.
-   *
-   * @type {any}
-   * @memberof Detail
-   */
-  options?: string[];
-
-  /**
-   * Optional radios to be rendered for radio input field.
-   *
-   * @type {any}
-   * @memberof Detail
-   */
-  radio?: _IRadio[];
-
-  /**
-   * The type of the input field (e.g., "text", "password").
-   * Defines the kind of data the input field expects.
-   *
-   * @type {string}
-   * @memberof Detail
-   */
-  type: string;
-  disabled?: boolean;
-  mt?: boolean;
-  tooltip?: boolean;
-  group?: string; //
-  errors?: Record<string, string[] | undefined> | null;
 }
 
 interface _IPostApiResponse {
@@ -115,6 +56,7 @@ interface _ICommonFieldProps {
   label: string;
   type: _TFieldType;
   placeholder?: string;
+  group?: string; //
   disabled?: boolean;
   description?: string;
   renderAfter?: ReactNode;
@@ -136,14 +78,23 @@ interface _TableRowType extends _ITableSignature{
   description?: string;
 }
 
-interface _ITableProps<T = _TableRowType[]> {
+interface _ITableBase<T= _TEntityType> {
+  entityType: T;
+  // deleteAction: (
+  //   id: string,
+  //   path: string
+  // ) => Promise<_IApiResponse<void> | undefined | void>;
+}
+
+interface _ITableProps<T = _TableRowType[]> extends _ITableBase {
   query?: string;
   currentPage?: number;
   columnData: string[];
-  entityType: string;
-  deleteAction: (id: string, path: string) => Promise<_IApiResponse<void> | undefined| void>;
   data?: T;
-  type?: string;
+  deleteAction: (
+    id: string,
+    path: string
+  ) => Promise<_IApiResponse<void> | undefined | void>;
 }
 
 interface _ISpecificTableProps {
@@ -207,4 +158,35 @@ type _TFieldType = "text" | "email" | "password" | "number";
 
   type _TRefDivElement = React.HTMLAttributes<HTMLDivElement>;
 type _TRefPElement = React.HTMLAttributes<HTMLParagraphElement>;
+
+
+type _TActionResult<T = unknown> =
+  | {
+      type: "success";
+      message: string;
+      data?: T; // Allow action-specific data in the result
+    }
+  | {
+      type: "error";
+      errors: Record<string, string[] | undefined>;
+    }
+  | { type: undefined; message: null };
+
+  type _TEntityType =
+    | "teacher"
+    | "student"
+    | "project"
+    | "task"
+    | "team"
+    | "parent"
+    | "subject"
+    | "class"
+    | "lesson"
+    | "exam"
+    | "assignment"
+    | "result"
+    | "attendance"
+    | "event"
+    | "announcement";
+
   

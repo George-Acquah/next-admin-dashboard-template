@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { DesktopSidebar, MobileSidebar } from "./sidebarTypes";
 import { Logo, LogoIcon } from "../ui/logo";
 import { sidebarLinks } from "@/data/sidebar.data";
@@ -8,7 +7,7 @@ import { SidebarLink } from "./sidebarLinks";
 import Image from "next/image";
 import { useConfigurator } from "@/utils/contexts/configurator.context";
 
-export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
+export const SidebarBody = (props: React.ComponentProps<'div'>) => {
   return (
     <>
       <DesktopSidebar {...props} />
@@ -37,7 +36,7 @@ const Sidebar = () => {
             icon: (
               <Image
                 src="https://assets.aceternity.com/manu.png"
-                className="h-7 w-7 flex-shrink-0 rounded-full"
+                className="h-7 w-7 flex-shrink-0 rounded-full object-cover" // Ensure object-cover is applied
                 width={50}
                 height={50}
                 alt="Avatar"

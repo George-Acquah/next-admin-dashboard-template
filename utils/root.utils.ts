@@ -68,3 +68,46 @@ export const getStringValue = (
   // Handle string array or undefined
   return "";
 };
+
+export function formatNumber(number: number, decPlaces: number) {
+  decPlaces = Math.pow(10, decPlaces);
+  let stringNumber = number.toString();
+
+  const abbrev = ["K", "M", "B", "T"];
+
+  for (let i = abbrev.length - 1; i >= 0; i--) {
+    const size = Math.pow(10, (i + 1) * 3);
+
+    if (size <= number) {
+      number = Math.round((number * decPlaces) / size) / decPlaces;
+
+      if (number == 1000 && i < abbrev.length - 1) {
+        number = 1;
+        stringNumber = number.toString();
+        i++;
+      }
+
+      stringNumber += abbrev[i];
+
+      break;
+    }
+  }
+
+  return stringNumber;
+}
+
+ // Helper function to identify boolean fields
+export const getTableBooleanFields = (item: _TableRowType) => {
+  return Object.keys(item).filter((key) => typeof item[key] === "boolean");
+};
+
+export const groupFieldConfigs = (fields: _ICommonFieldProps[]) => {
+  return fields.reduce((groups, field) => {
+    const group = field.group || "default"; // Use 'default' if no group is specified
+    if (!groups[group]) {
+      groups[group] = [];
+    }
+    groups[group].push(field);
+    return groups;
+  }, {} as Record<string, _ICommonFieldProps[]>);
+};

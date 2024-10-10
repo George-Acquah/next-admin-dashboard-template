@@ -32,7 +32,7 @@ type TableFooterProps = React.ComponentPropsWithoutRef<"div"> & {
 // Main table wrapper component
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
   ({ className, ...props }, ref) => (
-    <table ref={ref} className={cn("w-full mt-4", className)} {...props} />
+    <table ref={ref} className={cn("min-w-full mt-4 table-auto", className)} {...props} />
   )
 );
 Table.displayName = "Table";
@@ -47,6 +47,29 @@ const TableHeader = React.forwardRef<HTMLDivElement, TableTitleProps>(
   )
 );
 TableHeader.displayName = "TableHeader";
+
+// Checkbox component for individual rows
+const TableCheckbox = React.memo(
+  ({
+    checked,
+    id,
+    onChange,
+  }: {
+    checked: boolean;
+    id: string;
+    onChange: () => void;
+  }) => (
+    <input
+      type="checkbox"
+      aria-label={id}
+      id={id}
+      className="form-checkbox h-4 w-4"
+      checked={checked}
+      onChange={onChange}
+    />
+  )
+);
+TableCheckbox.displayName = "TableCheckbox";
 
 // Table header, body, and footer sections
 const TableHead = React.forwardRef<
@@ -99,7 +122,7 @@ const TableCell = React.forwardRef<HTMLTableCellElement, TableCellProps>(
       <Component
         ref={ref}
         className={cn(
-          "px-6 text-sm ",
+          "px-2 sm:px-4 md:px-6 text-sm", // Use smaller padding on small screens
           isHeader
             ? "text-left text-gray-500 dark:text-gray-400 font-bold uppercase tracking-wider"
             : "border-b border-gray-200 dark:border-zinc-900",
@@ -121,14 +144,12 @@ const TableImageCell = React.forwardRef<HTMLImageElement, TableImageCellProps>(
       alt={alt}
       width={40}
       height={40}
-      className={cn(
-        "w-9 h-9 rounded-full object-cover",
-        className
-      )}
+      className={cn("w-9 h-9 rounded-full object-cover", className)} // Ensure object-cover is applied
       {...props}
     />
   )
 );
+
 TableImageCell.displayName = "TableImageCell";
 
 // Table title component for a card-like display
@@ -184,4 +205,5 @@ export {
   TableTitle,
   TableDescription,
   TableFooterContent,
+  TableCheckbox
 };
